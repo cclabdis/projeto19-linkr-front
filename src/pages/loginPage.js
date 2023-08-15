@@ -1,5 +1,4 @@
 import { FaBeer } from 'react-icons/fa';
-import 'react-link-previewer/src/style.css'
 
 
 
