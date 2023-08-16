@@ -1,7 +1,5 @@
-export default function SignupPage(){
-    return (
-    <>
-        SignUp Page
-    </>
-    )
+import AuthPage from "../components/auth/authPage";
+
+export default function LoginPage() {
+    return <AuthPage action={"signUp"} />
 }
