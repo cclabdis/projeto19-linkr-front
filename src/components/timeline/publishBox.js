@@ -14,8 +14,6 @@ export default function PublishBox({ onPublish }) {
 
     setIsPublishing(true);
     setErrorMessage("");
-    console.log(user)
-    console.log(user.token)
     try {
       const postData = {
         link,
@@ -26,8 +24,8 @@ export default function PublishBox({ onPublish }) {
       // Ação de sucesso
       onPublish(newPost);
 
-      setLink("");
-      setDescription("");
+      //setLink("");
+      //setDescription("");
     } catch (error) {
       setErrorMessage("Houve um erro ao publicar seu link");
     } finally {
