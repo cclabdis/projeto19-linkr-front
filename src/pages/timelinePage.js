@@ -3,6 +3,7 @@ import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
 import PostCard from "../components/timeline/PostCard.jsx";
 import { styled } from "styled-components";
+import { useEffect } from "react";
 
 const mockPost = {
     username: "Teste Nildo",
