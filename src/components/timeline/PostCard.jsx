@@ -45,12 +45,22 @@ const Card =  styled.div`
     display: flex;
     gap: 20px;
 
+    * { 
+        box-sizing: border-box;
+    }
+
     >img {
         flex: none;
         width: 50px;
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        box-sizing: border-box;
+        width: 100%;
+        border-radius: 0px;
     }
 `
 
@@ -83,7 +93,7 @@ const PostInfo = styled.div`
 `
 
 const LinkContainer = styled.div`
-    height: 155px;
+    min-height: 155px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     display: flex;
@@ -94,12 +104,13 @@ const LinkContainer = styled.div`
         flex-direction: column;
         gap: 10px;
         justify-content: space-between;
+        overflow: hidden;
     }
 
     img {
         flex: none;
         width: 155px;
-        height: 155px;
+        min-height: 155px;
         object-fit: cover;
         border-radius: 0px 11px 11px 0px;
     }
