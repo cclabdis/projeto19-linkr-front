@@ -24,8 +24,12 @@ export default function PostCard({post}){
                 <h1>{post.username}</h1>
                 <h2>{post.description}</h2>
                 <LinkContainer>
-
-                    <h2>{post.description}</h2>
+                    <div>
+                        <h3>{post.linkMetadata.title}</h3>
+                        <h4>{post.linkMetadata.header}</h4>
+                        <h5>{post.linkUrl}</h5>
+                    </div>
+                    <img src={post.linkMetadata.image} alt="metadata" />
                 </LinkContainer>
             </PostInfo>
         </Card>
@@ -41,7 +45,8 @@ const Card =  styled.div`
     display: flex;
     gap: 20px;
 
-    img {
+    >img {
+        flex: none;
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -81,5 +86,51 @@ const LinkContainer = styled.div`
     height: 155px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
+    display: flex;
 
+    div {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    img {
+        flex: none;
+        width: 155px;
+        height: 155px;
+        object-fit: cover;
+        border-radius: 0px 11px 11px 0px;
+    }
+
+    h3 {
+        font-family: Lato;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #CECECE;
+    }
+
+    h4 {
+        font-family: Lato;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 13px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #9B9595;
+    }
+
+    h5 {
+        font-family: Lato;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 13px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #CECECE;
+    }
 `
