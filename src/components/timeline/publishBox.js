@@ -1,46 +1,39 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { createPost } from "../../services/apiPosts";
+import { UserContext } from "../../contexts/userContext";
 
 export default function PublishBox({ onPublish }) {
   const [link, setLink] = useState("");
   const [description, setDescription] = useState("");
   const [isPublishing, setIsPublishing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
+  const { user } = useContext(UserContext)
+
   const handlePublish = async () => {
     if (link.trim() === "") return
-    
+
     setIsPublishing(true);
     setErrorMessage("");
-
-
-    const token = localStorage.getItem('token')
-    if (!token) {
-        console.log('Token not found in LocalStorage');
-        return;
-    }
-
+    console.log(user)
+    console.log(user.token)
     try {
-        const postData = {
-          link,
-          description,
-        };
+      const postData = {
+        link,
+        description,
+      };
+      // Chamada de API usando o serviço apiPosts
+      const newPost = await createPost(postData, user.token);
+      // Ação de sucesso
+      onPublish(newPost);
 
-  
-        // Chamada de API usando o serviço apiPosts
-        const newPost = await createPost(postData, token);
-  
-        // Ação de sucesso
-        onPublish(newPost);
-  
-        setLink("");
-        setDescription("");
-      } catch (error) {
-        setErrorMessage("Houve um erro ao publicar seu link");
-      } finally {
-        setIsPublishing(false);
-      }
-    };
+      setLink("");
+      setDescription("");
+    } catch (error) {
+      setErrorMessage("Houve um erro ao publicar seu link");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
 
   return (
     <div>
