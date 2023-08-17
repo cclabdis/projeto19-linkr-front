@@ -2,21 +2,6 @@ import { styled } from "styled-components";
 
 
 export default function PostCard({post}){
-    // const urlMetadata = require('url-metadata');
-
-    // urlMetadata('https://www.npmjs.com/package/url-metadata'
-    // ,     
-    //     { mode: 'no-cors'
-    //     }
-    // )
-    // .then((metadata) => {
-    // console.log(metadata)
-    // // do stuff with the metadata
-    // },
-    // (err) => {
-    // console.log(err)
-    // });
-
     return (
         <Card>
             <img src={post.photo} alt="user" />
