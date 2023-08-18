@@ -14,14 +14,14 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <Card>
+        <Card data-test="post">
             <img src={post.photo} alt="user" />
             <PostInfo>
-                <h1>{post.username}</h1>
-                <h2>{replacedDesc}</h2>
+                <h1 data-test="username">{post.username}</h1>
+                <h2 data-test="description">{replacedDesc}</h2>
                 {post.linkMetadata
                     ?
-                    <LinkContainer onClick={() => openInNewTab(post.link)}>
+                    <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
                         <div>
                             <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
@@ -30,8 +30,9 @@ export default function PostCard({ post }) {
                         <img src={post.linkMetadata.image} alt="metadata" />
                     </LinkContainer>
                     :
-                    <LinkEmpty>
-                        <h3>No preview available!</h3>
+                    <LinkEmpty data-test="link" onClick={() => openInNewTab(post.link)}>
+                        <h3>No preview available</h3>
+                        <h5>{post.link}</h5>
                     </LinkEmpty>
                 }
 
@@ -161,14 +162,16 @@ const LinkContainer = styled.div`
 `
 
 const LinkEmpty = styled.div`
-    height: 50px;
+    height: 80px;
     min-width: 500px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     padding: 20px;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
 
     h3 {
         font-family: Lato;
@@ -178,5 +181,19 @@ const LinkEmpty = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
+    }
+
+    h5 {
+        font-family: Lato;
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 13px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #CECECE;
+    }
+
+    &:hover{
+        cursor: pointer;
     }
 `
