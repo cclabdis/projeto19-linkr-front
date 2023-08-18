@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import replace from 'react-string-replace';
 
-export default function PostCard({post}){
+export default function PostCard({ post }) {
     const desc = post.description;
     const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
         <a key={i} href={`/hashtag/${match}`}>
@@ -9,26 +9,38 @@ export default function PostCard({post}){
         </a>
     ));
 
+    const openInNewTab = (url) => {
+        window.open(url, "_blank", "noreferrer");
+    };
+
     return (
         <Card>
             <img src={post.photo} alt="user" />
             <PostInfo>
                 <h1>{post.username}</h1>
                 <h2>{replacedDesc}</h2>
-                <LinkContainer>
-                    <div>
-                        <h3>{post.linkMetadata.title}</h3>
-                        <h4>{post.linkMetadata.header}</h4>
-                        <h5>{post.linkUrl}</h5>
-                    </div>
-                    <img src={post.linkMetadata.image} alt="metadata" />
-                </LinkContainer>
+                {post.linkMetadata
+                    ?
+                    <LinkContainer onClick={() => openInNewTab(post.link)}>
+                        <div>
+                            <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
+                            <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
+                            <h5>{post.link}</h5>
+                        </div>
+                        <img src={post.linkMetadata.image} alt="metadata" />
+                    </LinkContainer>
+                    :
+                    <LinkEmpty>
+                        <h3>No preview available!</h3>
+                    </LinkEmpty>
+                }
+
             </PostInfo>
         </Card>
     )
 }
 
-const Card =  styled.div`
+const Card = styled.div`
     width: 611px;
     background-color: #171717;
     border-radius: 16px;
@@ -36,6 +48,7 @@ const Card =  styled.div`
     padding: 20px;
     display: flex;
     gap: 20px;
+    box-sizing: border-box;
 
     * { 
         box-sizing: border-box;
@@ -50,7 +63,6 @@ const Card =  styled.div`
     }
 
     @media (max-width: 768px) {
-        box-sizing: border-box;
         width: 100%;
         border-radius: 0px;
     }
@@ -138,6 +150,31 @@ const LinkContainer = styled.div`
         font-size: 11px;
         font-weight: 400;
         line-height: 13px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #CECECE;
+    }
+
+    &:hover{
+        cursor: pointer;
+    }
+`
+
+const LinkEmpty = styled.div`
+    height: 50px;
+    min-width: 500px;
+    border: 1px solid #4D4D4D;
+    border-radius: 11px;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    h3 {
+        font-family: Lato;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
         letter-spacing: 0em;
         text-align: left;
         color: #CECECE;
