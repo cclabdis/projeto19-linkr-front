@@ -58,7 +58,7 @@ const Form = ({ action }) => {
         }
         setSubmitting(false);
     };
-    console.log(data);
+
     return (
         <form>
             {Object.keys(fields).map(field =>
