@@ -1,13 +1,20 @@
 import { styled } from "styled-components";
-
+import replace from 'react-string-replace';
 
 export default function PostCard({post}){
+    const desc = post.description;
+    const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
+        <a key={i} href={`/hashtag/${match}`}>
+            #{match}
+        </a>
+    ));
+
     return (
         <Card>
             <img src={post.photo} alt="user" />
             <PostInfo>
                 <h1>{post.username}</h1>
-                <h2>{post.description}</h2>
+                <h2>{replacedDesc}</h2>
                 <LinkContainer>
                     <div>
                         <h3>{post.linkMetadata.title}</h3>
@@ -74,6 +81,12 @@ const PostInfo = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #B7B7B7;
+
+        a {
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+        }
     }
 `
 

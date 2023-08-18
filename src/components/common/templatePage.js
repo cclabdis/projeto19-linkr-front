@@ -8,7 +8,6 @@ export default function TemplatePage({title, hasPublishBox, children}){
                 <div>{title}</div>
                 {(hasPublishBox) && <div>Publish Box</div>}
                 {children}
-                <SideBar/>
         </>
     )
 }
