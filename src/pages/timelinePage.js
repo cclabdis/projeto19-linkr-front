@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
 import PostCard from "../components/timeline/PostCard.jsx";
 import { styled } from "styled-components";
 import SideBar from "../components/common/sideBar";
+import { UserContext } from "../contexts/userContext";
+import { GetPosts } from "../services/apiPosts";
 
 const mockPost = {
     username: "Teste Nildo",
@@ -20,7 +22,28 @@ const mockPost = {
 const posts = [mockPost, mockPost];
 
 export default function TimeLinePage() {
-  //const [posts, setPosts] = useState([]);
+//>>>>>>>>>>>>>>>>>>Alterações de Jefti, apagar comentarios depois !!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+  const {user} = useContext(UserContext); //Essa variável contém as informações do usuario recebidas no login e guardadas no usercontext;
+  const [serverPosts, setServerPosts] = useState([]); //Essa variável vai guardar os posts recebidos
+  
+  useEffect(()=>{
+    GetPosts(user.token).then((resp=>{
+      console.log(resp);
+      setServerPosts(resp.data);
+    }))
+    .catch((err)=>{
+      console.log(err)
+    });
+  },[])
+
+
+
+
+//>>>>>>>>>>>>>>>>>> Fim das alterações de Jefti, apagar comentarios depois!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+//const [posts, setPosts] = useState([]);
 
   // useEffect(()=>{
   //     apiHashtags.getPostsByHashtag(hashtag).

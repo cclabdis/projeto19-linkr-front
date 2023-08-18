@@ -15,3 +15,14 @@ export const createPost = async (postData, token) => {
     throw new AxiosError(error.message);
   }
 };
+
+//>>>>>>>>>>>>>>>>>>Alterações de Jefti, apagar comentarios depois <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+export const GetPosts = async (token)=>{
+  try {
+    const response = await axios.get(`${API_URL}/timeline`,ConfigToken(token));
+    return response.data;
+  } catch (error) {
+    throw new AxiosError(error.message);
+  }
+}
+//>>>>>>>>>>>>>>>>>>Fim das alterações de Jefti, apagar comentarios depois <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
