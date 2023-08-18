@@ -57,9 +57,9 @@ const SideBarContainer = styled.div`
     width: 301px;
     height: 406px;
     border-radius: 16px;
-    position: absolute;
+    /* position: absolute;
     top:232px;
-    left:1025px;
+    left:1025px; */
 `
 
 const TitleContainer = styled.div`

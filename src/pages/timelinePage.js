@@ -3,11 +3,12 @@ import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
 import PostCard from "../components/timeline/PostCard.jsx";
 import { styled } from "styled-components";
+import SideBar from "../components/common/sideBar";
 
 const mockPost = {
     username: "Teste Nildo",
     photo: "https://picsum.photos/id/237/200/300",
-    description: "Muito maneiro esse tutorial de Material UI com React, deem uma olhada!",
+    description: "Muito maneiro esse tutorial de Material UI com React, deem uma olhada! #teste",
     linkUrl: "https://medium.com/javascript-in-plain-english/i-created-the-exact-same-app-in-react-and-vue-here-are-the-differences-e9a1ae8077fd",
     linkMetadata: { 
         title: "Como aplicar o Material UI em um projeto React",
@@ -19,6 +20,17 @@ const mockPost = {
 const posts = [mockPost, mockPost];
 
 export default function TimeLinePage() {
+  //const [posts, setPosts] = useState([]);
+
+  // useEffect(()=>{
+  //     apiHashtags.getPostsByHashtag(hashtag).
+  //     then((resp)=>{
+  //         console.log(resp.data);
+  //         setListaPosts(resp.data);
+  //     })
+  //     .catch((err)=>{console.log(err.message)});
+  // },[])
+
   const handlePublish = (newPost) => {
     // Aqui você pode implementar a lógica para adicionar a nova publicação à timeline
     console.log("Nova publicação:", newPost);
@@ -28,14 +40,30 @@ export default function TimeLinePage() {
     <TemplatePage title={`Time Line Page`} hasPublishBox={true}>
       <PublishBox onPublish={handlePublish} />
       {/* Outro conteúdo da timeline aqui */}
-      <PostsContainer>
-                {posts.map(p =>
-                    <PostCard post={p}/>
-                )}
-            </PostsContainer>
+      <Container>
+        <PostsContainer>
+                  {posts.map(p =>
+                      <PostCard post={p}/>
+                  )}
+        </PostsContainer>      
+        <SideBar />
+      </Container>
+
+      
     </TemplatePage>
   );
 }
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+
+  @media (max-width: 1024px){
+    flex-direction: column;
+    align-items: center;
+  }
+`
 
 const PostsContainer = styled.div`
     display: flex;
