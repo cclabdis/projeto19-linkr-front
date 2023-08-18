@@ -5,13 +5,13 @@ import { UserContext } from '../../contexts/userContext';
 import apiAuth from '../../services/apiAuth';
 
 const signInFields = {
-    'email': { type: 'email', placeholder: "e-mail" },
-    'password': { type: 'password', placeholder: "password" }
+    'email': { type: 'email', placeholder: "e-mail", dataTest: 'email' },
+    'password': { type: 'password', placeholder: "password", dataTest: 'password' }
 };
 const signUpFields = {
     ...signInFields,
-    'username': { type: 'text', placeholder: 'username' },
-    'photo': { type: 'url', placeholder: 'picture url' }
+    'username': { type: 'text', placeholder: 'username', dataTest: 'username' },
+    'photo': { type: 'url', placeholder: 'picture url', dataTest: 'picture-url' }
 };
 
 const Form = ({ action }) => {
@@ -46,6 +46,8 @@ const Form = ({ action }) => {
         <form>
             {Object.keys(fields).map(field =>
                 <input
+                    data-test={fields[field].dataTest}
+                    required
                     key={field}
                     className="Oswald"
                     name={field}
@@ -58,6 +60,7 @@ const Form = ({ action }) => {
                 />
             )}
             <button
+                data-test={action === "signIn" ? "login-btn" : "sign-up-btn"}
                 disabled={submitting}
                 className="Oswald"
                 onClick={ev => handleSubmit(ev)}
