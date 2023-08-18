@@ -7,10 +7,11 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const createPost = async (postData, token) => {
 
   try {
+
     const hashtagsList = IdentifyHashtags(postData.description);
     const response = await axios.post(`${API_URL}/timeline`, {...postData,hashtagsList}, ConfigToken(token));
     return response.data;
   } catch (error) {
-    throw new AxiosError(error.response);
+    throw new AxiosError(error.message);
   }
 };
