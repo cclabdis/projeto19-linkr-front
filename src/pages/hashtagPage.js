@@ -15,7 +15,7 @@ export default function HashatgPage(){
             setListaPosts(resp.data);
         })
         .catch((err)=>{console.log(err.message)});
-    },[])
+    },[hashtag])
     
     const Posts = listaPosts.map((el)=>(
         <ApagarDepois>

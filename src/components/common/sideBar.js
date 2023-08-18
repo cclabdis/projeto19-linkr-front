@@ -11,7 +11,7 @@ export default function SideBar(){
 
 
     const ComponentsList = listaTrending.map((el)=>(
-        <ListItem hashtag={el.hashtag} key={`item${el.id})`} />
+        <ListItem hashtag={el.hashtag} key={`item${el.id})`} data-test="hashtag" />
     ));
 
     useEffect(()=>{
@@ -30,7 +30,7 @@ export default function SideBar(){
 
     
     return (
-        <SideBarContainer>
+        <SideBarContainer data-test="trending">
             <TitleContainer className="Oswald">
                 trending
             </TitleContainer>
