@@ -1,15 +1,17 @@
 import { useParams } from "react-router-dom"
 import TemplatePage from "../components/common/templatePage";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import apiHashtags from "../services/apiHashtags";
 import { styled } from "styled-components";
+import { UserContext } from "../contexts/userContext";
 
 export default function HashatgPage(){
     const {hashtag} = useParams(); 
     const [listaPosts, setListaPosts] = useState([]);
+    const {user} = useContext(UserContext)
 
     useEffect(()=>{
-        apiHashtags.getPostsByHashtag(hashtag).
+        apiHashtags.getPostsByHashtag(hashtag,user.token).
         then((resp)=>{
             console.log(resp.data);
             setListaPosts(resp.data);
