@@ -1,23 +1,17 @@
 import axios, { AxiosError } from "axios";
 import ConfigToken from "./configToken";
+import IdentifyHashtags from "../utils/identifyHashtags.function";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const createPost = async (postData, token) => {
-  // const url = `${API_URL}/timeline`;
-  const tokenr = ConfigToken(token)
 
-  console.log(tokenr)
   try {
-    const response = await axios.post(`${API_URL}/timeline`, postData, ConfigToken(token));
-    
+
+    const hashtagsList = IdentifyHashtags(postData.description);
+    const response = await axios.post(`${API_URL}/timeline`, {...postData,hashtagsList}, ConfigToken(token));
     return response.data;
   } catch (error) {
-    throw new AxiosError(error.response);
+    throw new AxiosError(error.message);
   }
 };
-
-// function createPost(){
-//   const promise = axios.get(`${API_URL}/trendings`);
-//   return promise;
-// }
