@@ -17,6 +17,7 @@ const AuthPage = ({ action }) => {
             <div className="form__container">
                 <Form action={action} />
                 <Link
+                    data-test={login ? "sign-up-link" : "login-link"}
                     className="Lato"
                     to={login ? "/sign-up" : "/"}
                 >
