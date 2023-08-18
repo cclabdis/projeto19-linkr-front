@@ -4,11 +4,14 @@ import { useContext, useEffect, useState } from "react";
 import apiHashtags from "../services/apiHashtags";
 import { styled } from "styled-components";
 import { UserContext } from "../contexts/userContext";
+import { RefreshContext } from "../contexts/refreshContext";
+import SideBar from "../components/common/sideBar";
 
 export default function HashatgPage(){
     const {hashtag} = useParams(); 
     const [listaPosts, setListaPosts] = useState([]);
-    const {user} = useContext(UserContext)
+    const {user} = useContext(UserContext);
+    const {refresh, setRefresh} = useContext(RefreshContext);
 
     useEffect(()=>{
         apiHashtags.getPostsByHashtag(hashtag,user.token).
@@ -17,7 +20,7 @@ export default function HashatgPage(){
             setListaPosts(resp.data);
         })
         .catch((err)=>{console.log(err.message)});
-    },[hashtag])
+    },[])
     
     const Posts = listaPosts.map((el)=>(
         <ApagarDepois>
@@ -38,7 +41,11 @@ export default function HashatgPage(){
     <>
         <TemplatePage title={`# ${hashtag}`} hasPublishBox={false}>
             <>Posts com a #{hashtag} aqui...</>
+            <div>
+                <button onClick={()=>{setRefresh(!refresh)}}>recarregar {refresh.toString()}</button>
+            </div>
             {Posts}
+            <SideBar/>
         </TemplatePage>
     </>
     )

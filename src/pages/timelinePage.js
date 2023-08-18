@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
@@ -7,13 +7,15 @@ import { styled } from "styled-components";
 import SideBar from "../components/common/sideBar";
 import getPosts from "../services/apiPosts";
 import ClipLoader from "react-spinners/ClipLoader";
+import { UserContext } from "../contexts/userContext";
 
 export default function TimeLinePage() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const {user} = useContext(UserContext);
 
   useEffect(() => {
-    getPosts()
+    getPosts(user.token)
       .then((r) => {
         setPosts(r.data);
         setIsLoading(false);
