@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { UserContext } from '../../contexts/userContext';
 import apiAuth from '../../services/apiAuth';
+import { object, string } from 'yup';
 
 const signInFields = {
     'email': { type: 'email', placeholder: "e-mail", dataTest: 'email' },
@@ -13,6 +14,18 @@ const signUpFields = {
     'username': { type: 'text', placeholder: 'username', dataTest: 'username' },
     'photo': { type: 'url', placeholder: 'picture url', dataTest: 'picture-url' }
 };
+
+const signInSchema = object({
+    email: string().required(),
+    password: string().min(3).required(),
+});
+
+const signUpSchema = object({
+    email: string().required(),
+    password: string().min(3).required(),
+    username: string().min(3).required(),
+    photo: string().url().required(),
+})
 
 const Form = ({ action }) => {
     const fields = (action === "signIn" && signInFields)
@@ -29,6 +42,10 @@ const Form = ({ action }) => {
         ev.preventDefault();
         setSubmitting(true);
         try {
+            //Validate data:
+            await (action === "signIn" ? signInSchema : signUpSchema)
+                .validate(data)
+
             const responseData = await apiAuth(`/${action}`, data);
             if (action === "signIn") {
                 localStorage.setItem("user", JSON.stringify(responseData));
@@ -37,7 +54,7 @@ const Form = ({ action }) => {
             } else if (action === "signUp") { navigate("/"); }
 
         } catch ({ message }) {
-            alert(message.data);
+            alert(message?.data || message);
         }
         setSubmitting(false);
     };
@@ -47,7 +64,7 @@ const Form = ({ action }) => {
             {Object.keys(fields).map(field =>
                 <input
                     data-test={fields[field].dataTest}
-                    required
+                    required={true}
                     key={field}
                     className="Oswald"
                     name={field}
