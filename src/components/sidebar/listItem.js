@@ -1,8 +1,13 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { styled } from "styled-components";
+import { RefreshContext } from "../../contexts/refreshContext";
 export default function ListItem({hashtag}){
+    const {refresh, setRefresh} = useContext(RefreshContext);
+    
     const nav = useNavigate();
     function handleRedirect(hashtag){
+        setRefresh(!refresh);
         nav(`/hashtag/${hashtag}`);
     }
 

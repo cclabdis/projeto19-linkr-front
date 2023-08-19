@@ -4,57 +4,103 @@ import { useContext, useEffect, useState } from "react";
 import apiHashtags from "../services/apiHashtags";
 import { styled } from "styled-components";
 import { UserContext } from "../contexts/userContext";
-import { RefreshContext } from "../contexts/refreshContext";
+import ClipLoader from "react-spinners/ClipLoader";
+import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
+
 
 export default function HashatgPage(){
     const {hashtag} = useParams(); 
-    const [listaPosts, setListaPosts] = useState([]);
     const {user} = useContext(UserContext);
-    const {refresh, setRefresh} = useContext(RefreshContext);
+    const [listaPosts, setListaPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
+        setListaPosts([]);
+        setIsLoading(true);
         apiHashtags.getPostsByHashtag(hashtag,user.token).
         then((resp)=>{
             console.log(resp.data);
             setListaPosts(resp.data);
         })
-        .catch((err)=>{console.log(err.message)});
-    },[])
+        .catch((err)=>{
+            console.log(err.message);
+        })
+        .finally(()=>{
+            setIsLoading(false); 
+        })
+    },[hashtag])
     
-    const Posts = listaPosts.map((el)=>(
-        <ApagarDepois>
-            <ul>
-                <li>usuario: {el.username}</li>
-                <li>mail: {el.mail}</li>
-                <li>photo: {el.photo}</li>
-                <li>description: {el.description}</li>
-                <li>link: {el.link}</li>
-                <li>hashtag: {el.hashtag}</li>
-                <li>created_at: {el.created_at}</li>
-            </ul>
-        </ApagarDepois>
-    ));
-
 
     return (
-    <>
         <TemplatePage title={`# ${hashtag}`} hasPublishBox={false}>
-            <>Posts com a #{hashtag} aqui...</>
-            <div>
-                <button onClick={()=>{setRefresh(!refresh)}}>recarregar {refresh.toString()}</button>
-            </div>
-            {Posts}
-            <SideBar/>
+
+
+
+
+            <TitleContainer className="Oswald">
+                <h1 data-test="hashtag-title"># {hashtag}</h1>
+            </TitleContainer>
+            <Container>
+                <PostsContainer>
+                    {(isLoading)?(
+                        <LoadingContainer>
+                            <ClipLoader color="#fff" size={150} />
+                            <h1 className="Oswald">Loading posts...</h1>
+                        </LoadingContainer>)
+                    :(listaPosts.map((post,i)=>(<PostCard post={post} key={`post_${i}`} />)))}
+                </PostsContainer>
+                <SideBar/>
+            </Container>
+
         </TemplatePage>
-    </>
     )
 }
 
-const ApagarDepois = styled.div`
-    background-color: #666;
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  @media (max-width: 1024px){
+    flex-direction: column;
+    align-items: center;
+  }
+`
+const TitleContainer = styled.div`
     display: flex;
-    border-bottom: 1px solid white;
-    margin: 10px;
+    align-items: center;
+    justify-content: center;
     width: auto;
+    margin-right: 810px;
+    margin-bottom: 40px;
+    h1{
+        font-size: 43px;
+    }
+    @media (max-width: 1024px){
+        margin-right: 500px;
+    }
+    @media (max-width: 768px){
+        margin-right: 0px;
+    }
+`
+const LoadingContainer = styled.div`
+    height: 345px;
+    width: 611px;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    h1{
+      font-size: 35px;
+    }
+`
+
+const PostsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 `
