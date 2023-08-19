@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import React, { useContext } from "react";
-import { useEffect, useState } from "react";
-=======
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../contexts/userContext";
->>>>>>> fix: adjusted posts rendering with token
 import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
 import PostCard from "../components/timeline/PostCard.jsx";
@@ -13,7 +8,6 @@ import { styled } from "styled-components";
 import SideBar from "../components/common/sideBar";
 import getPosts from "../services/apiPosts";
 import ClipLoader from "react-spinners/ClipLoader";
-import { UserContext } from "../contexts/userContext";
 import TitleTemplate from "../components/common/titleTemplate";
 
 export default function TimeLinePage() {
@@ -21,7 +15,6 @@ export default function TimeLinePage() {
   const token = user.token;
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {user} = useContext(UserContext);
 
   useEffect(() => {
     getPosts(token)
