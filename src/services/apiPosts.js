@@ -20,3 +20,8 @@ export default function getPosts(token) {
   const promise = axios.get(`${API_URL}/timeline`, ConfigToken(token));
   return promise;
 }
+
+export async function updatePosts(token,idPost,body){
+  const promise = axios.patch(`${API_URL}/timeline/posts/${idPost}`, ConfigToken(token), body);
+  return promise;
+}
