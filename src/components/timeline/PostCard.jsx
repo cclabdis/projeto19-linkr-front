@@ -6,6 +6,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { handleDelete } from "./deleteCard";
 import { UserContext } from "../../contexts/userContext";
 import Modal from 'react-modal';
+import { RefreshContext } from "../../contexts/refreshContext";
+
 
 export default function PostCard({ post }) {
     const [desc, setDesc] = useState(post.description);
@@ -14,6 +16,7 @@ export default function PostCard({ post }) {
             #{match}
         </a>
     ));
+    const refreshContext = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
@@ -34,6 +37,7 @@ export default function PostCard({ post }) {
     }
 
     return (
+
         <Card data-test="post">
             <ImgLikeContainer>
                 <img src={post.photo} alt="user" />
@@ -52,11 +56,31 @@ export default function PostCard({ post }) {
                         isOpen={isModalOpen}
                         onRequestClose={() => setIsModalOpen(false)}
                         contentLabel="Confirm Delete"
+                        style={{
+                            overlay: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                            },
+                            content: {
+                                top: '50%',
+                                left: '50%',
+                                right: 'auto',
+                                bottom: 'auto',
+                                marginRight: '-50%',
+                                transform: 'translate(-50%, -50%)',
+                                border: 'none',
+                                padding: '0',
+                            },
+                        }}
                     >
-                        <h2>Confirm Delete</h2>
-                        <p>Are you sure you want to delete this post?</p>
-                        <button onClick={() => handleDelete(post.id, user.token)}>Delete</button>
-                        <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+                        <ModalContent>
+                            <h2>Are you sure you want to delete this post?</h2>
+
+                            <div>
+                                <button onClick={() => setIsModalOpen(false)}>No, go back</button>
+                                <button onClick={() => handleDelete(post.id, user.token, refreshContext, setIsModalOpen)}>Yes, delete it</button>
+
+                            </div>
+                        </ModalContent>
                     </Modal>
 
                 </NameIconsContainer>
@@ -288,3 +312,46 @@ const EditDescription = styled.div`
         width: 100%;
     }
 `
+
+const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #333333;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0.2, 0.2);
+
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    &:first-child {
+        background-color: #fff;
+        color: #2196f3;
+      }
+  
+      &:last-child {
+        background-color: #2196f3;
+        color: #fff;
+      }
+  
+      &:hover {
+        background-color: #1565c0;
+        color: #fff;
+      }
+  }
+`;
