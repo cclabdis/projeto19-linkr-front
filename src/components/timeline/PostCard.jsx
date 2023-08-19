@@ -19,7 +19,7 @@ export default function PostCard({ post }) {
             <PostInfo>
                 <h1 data-test="username">{post.username}</h1>
                 <h2 data-test="description">{replacedDesc}</h2>
-                {post.linkMetadata
+                {Object.keys(post.linkMetadata).length !== 0
                     ?
                     <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
                         <div>
@@ -105,9 +105,11 @@ const PostInfo = styled.div`
 
 const LinkContainer = styled.div`
     min-height: 155px;
+    min-width: 500px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     display: flex;
+    justify-content: space-between;
 
     div {
         padding: 20px;
