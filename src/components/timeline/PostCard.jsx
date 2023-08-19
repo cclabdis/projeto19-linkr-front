@@ -2,7 +2,10 @@ import { styled } from "styled-components";
 import replace from 'react-string-replace';
 import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
 import { PiPencilBold } from 'react-icons/pi';
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { handleDelete } from "./deleteCard";
+import { UserContext } from "../../contexts/userContext";
+import Modal from 'react-modal';
 
 export default function PostCard({ post }) {
     const [desc, setDesc] = useState(post.description);
@@ -11,6 +14,12 @@ export default function PostCard({ post }) {
             #{match}
         </a>
     ));
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const openDeleteModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const { user } = useContext(UserContext)
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
@@ -35,12 +44,24 @@ export default function PostCard({ post }) {
                 <NameIconsContainer>
                     <h1 data-test="username">{post.username}</h1>
                     <div>
-                        <PiPencilBold size={20} color={"white"} onClick={editPost}/>
-                        <AiFillDelete size={20} />
+                        <PiPencilBold size={20} color={"white"} onClick={editPost} />
+                        {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
+                        <AiFillDelete size={20} onClick={openDeleteModal} />
                     </div>
+                    <Modal
+                        isOpen={isModalOpen}
+                        onRequestClose={() => setIsModalOpen(false)}
+                        contentLabel="Confirm Delete"
+                    >
+                        <h2>Confirm Delete</h2>
+                        <p>Are you sure you want to delete this post?</p>
+                        <button onClick={() => handleDelete(post.id, user.token)}>Delete</button>
+                        <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+                    </Modal>
+
                 </NameIconsContainer>
 
-                {isEditing 
+                {isEditing
                     ?
                     <EditDescription >
                         <input
@@ -53,7 +74,7 @@ export default function PostCard({ post }) {
                     :
                     <h2 data-test="description">{replacedDesc}</h2>
                 }
-                
+
                 {Object.keys(post.linkMetadata).length !== 0
                     ?
                     <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
