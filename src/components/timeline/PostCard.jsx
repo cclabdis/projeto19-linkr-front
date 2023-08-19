@@ -2,9 +2,10 @@ import { styled } from "styled-components";
 import replace from 'react-string-replace';
 import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
 import { PiPencilBold } from 'react-icons/pi';
+import { useState, useEffect, useRef } from "react";
 
 export default function PostCard({ post }) {
-    const desc = post.description;
+    const [desc, setDesc] = useState(post.description);
     const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
         <a key={i} href={`/hashtag/${match}`}>
             #{match}
@@ -14,6 +15,14 @@ export default function PostCard({ post }) {
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
     };
+
+    /// edit post///
+    const [isEditing, setIsEditing] = useState(false);
+    const editRef = useRef();
+
+    const editPost = () => {
+        setIsEditing(true);
+    }
 
     return (
         <Card data-test="post">
@@ -26,12 +35,25 @@ export default function PostCard({ post }) {
                 <NameIconsContainer>
                     <h1 data-test="username">{post.username}</h1>
                     <div>
-                        <PiPencilBold size={20} color={"white"}/>
+                        <PiPencilBold size={20} color={"white"} onClick={editPost}/>
                         <AiFillDelete size={20} />
                     </div>
                 </NameIconsContainer>
-                <h2 data-test="description">{replacedDesc}</h2>
 
+                {isEditing 
+                    ?
+                    <EditDescription >
+                        <input
+                            ref={editRef}
+                            type="text"
+                            value={desc}
+                            onChange={(e) => setDesc(e.target.value)}
+                        />
+                    </EditDescription>
+                    :
+                    <h2 data-test="description">{replacedDesc}</h2>
+                }
+                
                 {Object.keys(post.linkMetadata).length !== 0
                     ?
                     <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
@@ -40,7 +62,7 @@ export default function PostCard({ post }) {
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
                             <h5>{post.link}</h5>
                         </div>
-                        <img src={post.linkMetadata.image} alt="metadata" />
+                        <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                     </LinkContainer>
                     :
                     <LinkEmpty data-test="link" onClick={() => openInNewTab(post.link)}>
@@ -108,6 +130,10 @@ const NameIconsContainer = styled.div`
     div {
         display: flex;
         gap: 10px;
+
+        *:hover{
+            cursor: pointer;
+        }
     }
 `
 
@@ -229,5 +255,15 @@ const LinkEmpty = styled.div`
 
     &:hover{
         cursor: pointer;
+    }
+`
+
+const EditDescription = styled.div`
+    background-color: white;
+    border-radius: 7px;
+    width: 100%;
+
+    input {
+        width: 100%;
     }
 `
