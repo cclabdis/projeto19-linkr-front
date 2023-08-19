@@ -50,7 +50,7 @@ export default function PostCard({ post }) {
                     <div>
                         <PiPencilBold size={20} color={"white"} onClick={editPost} />
                         {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
-                        <AiFillDelete size={20} onClick={openDeleteModal} />
+                        <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
                     </div>
                     <Modal
                         isOpen={isModalOpen}
@@ -76,8 +76,8 @@ export default function PostCard({ post }) {
                             <h2>Are you sure you want to delete this post?</h2>
 
                             <div>
-                                <button onClick={() => setIsModalOpen(false)}>No, go back</button>
-                                <button onClick={() => handleDelete(post.id, user.token, refreshContext, setIsModalOpen)}>Yes, delete it</button>
+                                <button data-test="cancel" onClick={() => setIsModalOpen(false)}>No, go back</button>
+                                <button data-test="confirm" onClick={() => handleDelete(post.id, user.token, refreshContext, setIsModalOpen)}>Yes, delete it</button>
 
                             </div>
                         </ModalContent>

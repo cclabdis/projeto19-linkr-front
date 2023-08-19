@@ -35,28 +35,28 @@ export default function PublishBox({ onPublish }) {
   };
 
   return (
-    <PublishBoxContainer>
+    <PublishBoxContainer data-test="publish-box">
       <UserInfo>
         <UserPhoto src={user.photo} alt="User" />
         <span>{user.username}</span>
       </UserInfo>
       <InputsContainer>
         <SharePrompt>What are you going to share today?</SharePrompt>
-        <Input
+        <Input data-test="link"
           type="text"
           placeholder="http://..."
           value={link}
           onChange={(e) => setLink(e.target.value)}
           disabled={isPublishing}
         />
-        <DescriptionInput
+        <DescriptionInput data-test="description"
           type="text"
           placeholder="Awesome article about #javascript"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={isPublishing}
         />
-        <Button onClick={handlePublish} disabled={isPublishing}>
+        <Button data-test="publish-btn" onClick={handlePublish} disabled={isPublishing}>
           {isPublishing ? "Publishing..." : "Publish"}
         </Button>
       </InputsContainer>
