@@ -8,8 +8,8 @@ function getTrending(){
     return promise;
 }
 
-function getPostsByHashtag(hashtag){
-    const promise = axios.get(`${API_URL}/posts/${hashtag}`);
+function getPostsByHashtag(hashtag,token){
+    const promise = axios.get(`${API_URL}/posts/${hashtag}`,ConfigToken(token));
     return promise;
 }
 

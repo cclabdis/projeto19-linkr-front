@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router";
 import { styled } from "styled-components";
 import ListItem from "../sidebar/listItem";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import apiHashtags from "../../services/apiHashtags";
 import ClipLoader from "react-spinners/ClipLoader";
+import { RefreshContext } from "../../contexts/refreshContext";
 
 export default function SideBar(){
     const [listaTrending, setListaTrending] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const {refresh} = useContext(RefreshContext);
 
 
     const ComponentsList = listaTrending.map((el)=>(
@@ -17,7 +19,6 @@ export default function SideBar(){
     useEffect(()=>{
         apiHashtags.getTrending()
         .then((res)=> {
-            //console.log(res.data);
             setListaTrending(res.data);
             setIsLoading(false);
         })
@@ -25,7 +26,7 @@ export default function SideBar(){
             console.log(err);
             setIsLoading(false);
         });
-    },[])
+    },[refresh])
     
 
     

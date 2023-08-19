@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import TemplatePage from "../components/common/templatePage";
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
@@ -7,13 +7,16 @@ import { styled } from "styled-components";
 import SideBar from "../components/common/sideBar";
 import getPosts from "../services/apiPosts";
 import ClipLoader from "react-spinners/ClipLoader";
+import { UserContext } from "../contexts/userContext";
+import TitleTemplate from "../components/common/titleTemplate";
 
 export default function TimeLinePage() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const {user} = useContext(UserContext);
 
   useEffect(() => {
-    getPosts()
+    getPosts(user.token)
       .then((r) => {
         setPosts(r.data);
         setIsLoading(false);
@@ -30,10 +33,12 @@ export default function TimeLinePage() {
   };
 
   return (
-    <TemplatePage title={`Time Line Page`} hasPublishBox={true}>
+    <TemplatePage hasPublishBox={true}>
+
+      <TitleTemplate texto={'timeline'}/>
+      
       <PublishBox onPublish={handlePublish} />
       {/* Outro conteúdo da timeline aqui */}
-
       <Container>
         {isLoading ?
           <LoadingContainer>
