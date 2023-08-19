@@ -17,7 +17,6 @@ export const createPost = async (postData, token) => {
 };
 
 export default function getPosts(token) {
-  
   const promise = axios.get(`${API_URL}/timeline`, ConfigToken(token));
   return promise;
 }

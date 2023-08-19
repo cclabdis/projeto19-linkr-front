@@ -1,8 +1,11 @@
 import { styled } from "styled-components";
 import replace from 'react-string-replace';
+import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
+import { PiPencilBold } from 'react-icons/pi';
+import { useState, useEffect, useRef } from "react";
 
 export default function PostCard({ post }) {
-    const desc = post.description;
+    const [desc, setDesc] = useState(post.description);
     const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
         <a key={i} href={`/hashtag/${match}`}>
             #{match}
@@ -13,13 +16,45 @@ export default function PostCard({ post }) {
         window.open(url, "_blank", "noreferrer");
     };
 
+    /// edit post///
+    const [isEditing, setIsEditing] = useState(false);
+    const editRef = useRef();
+
+    const editPost = () => {
+        setIsEditing(true);
+    }
+
     return (
         <Card data-test="post">
-            <img src={post.photo} alt="user" />
+            <ImgLikeContainer>
+                <img src={post.photo} alt="user" />
+                <AiOutlineHeart size={30} />
+            </ImgLikeContainer>
+
             <PostInfo>
-                <h1 data-test="username">{post.username}</h1>
-                <h2 data-test="description">{replacedDesc}</h2>
-                {post.linkMetadata
+                <NameIconsContainer>
+                    <h1 data-test="username">{post.username}</h1>
+                    <div>
+                        <PiPencilBold size={20} color={"white"} onClick={editPost}/>
+                        <AiFillDelete size={20} />
+                    </div>
+                </NameIconsContainer>
+
+                {isEditing 
+                    ?
+                    <EditDescription >
+                        <input
+                            ref={editRef}
+                            type="text"
+                            value={desc}
+                            onChange={(e) => setDesc(e.target.value)}
+                        />
+                    </EditDescription>
+                    :
+                    <h2 data-test="description">{replacedDesc}</h2>
+                }
+                
+                {Object.keys(post.linkMetadata).length !== 0
                     ?
                     <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
                         <div>
@@ -27,7 +62,7 @@ export default function PostCard({ post }) {
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
                             <h5>{post.link}</h5>
                         </div>
-                        <img src={post.linkMetadata.image} alt="metadata" />
+                        <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                     </LinkContainer>
                     :
                     <LinkEmpty data-test="link" onClick={() => openInNewTab(post.link)}>
@@ -55,26 +90,32 @@ const Card = styled.div`
         box-sizing: border-box;
     }
 
-    >img {
-        flex: none;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
     @media (max-width: 768px) {
         width: 100%;
         border-radius: 0px;
     }
 `
 
-const PostInfo = styled.div`
+const ImgLikeContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 10px;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
+    gap: 20px;
+
+    img {
+        flex: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+`
+
+const NameIconsContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 
     h1 {
         font-family: Lato;
@@ -85,6 +126,23 @@ const PostInfo = styled.div`
         text-align: left;
         color: #ffffff;
     }
+
+    div {
+        display: flex;
+        gap: 10px;
+
+        *:hover{
+            cursor: pointer;
+        }
+    }
+`
+
+const PostInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
 
     h2 {
         font-family: Lato;
@@ -105,9 +163,11 @@ const PostInfo = styled.div`
 
 const LinkContainer = styled.div`
     min-height: 155px;
+    min-width: 500px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     display: flex;
+    justify-content: space-between;
 
     div {
         padding: 20px;
@@ -195,5 +255,15 @@ const LinkEmpty = styled.div`
 
     &:hover{
         cursor: pointer;
+    }
+`
+
+const EditDescription = styled.div`
+    background-color: white;
+    border-radius: 7px;
+    width: 100%;
+
+    input {
+        width: 100%;
     }
 `
