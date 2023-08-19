@@ -33,7 +33,7 @@ export default function HashatgPage(){
     
 
     return (
-        <TemplatePage title={`# ${hashtag}`} hasPublishBox={false}>
+        <TemplatePage hasPublishBox={false}>
 
 
 
@@ -72,7 +72,7 @@ const TitleContainer = styled.div`
     align-items: center;
     justify-content: center;
     width: auto;
-    margin-right: 810px;
+    margin-right: 740px;
     margin-bottom: 40px;
     h1{
         font-size: 43px;

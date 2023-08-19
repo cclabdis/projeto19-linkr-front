@@ -8,6 +8,7 @@ import SideBar from "../components/common/sideBar";
 import getPosts from "../services/apiPosts";
 import ClipLoader from "react-spinners/ClipLoader";
 import { UserContext } from "../contexts/userContext";
+import TitleTemplate from "../components/common/titleTemplate";
 
 export default function TimeLinePage() {
   const [posts, setPosts] = useState([]);
@@ -32,10 +33,12 @@ export default function TimeLinePage() {
   };
 
   return (
-    <TemplatePage title={`Time Line Page`} hasPublishBox={true}>
+    <TemplatePage hasPublishBox={true}>
+
+      <TitleTemplate texto={'timeline'}/>
+      
       <PublishBox onPublish={handlePublish} />
       {/* Outro conteúdo da timeline aqui */}
-
       <Container>
         {isLoading ?
           <LoadingContainer>
