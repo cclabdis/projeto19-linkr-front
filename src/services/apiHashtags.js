@@ -9,7 +9,7 @@ function getTrending(){
 }
 
 function getPostsByHashtag(hashtag,token){
-    const promise = axios.get(`${API_URL}/posts/${hashtag}`,ConfigToken(token));
+    const promise = axios.get(`${API_URL}/posts/hashtags/${hashtag}`,ConfigToken(token));
     return promise;
 }
 

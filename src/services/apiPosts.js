@@ -29,3 +29,8 @@ export const deletePost = async (postId, token) => {
     throw new AxiosError(error.message);
   }
 };
+
+export async function updatePosts(token,idPost,body){
+  const promise = axios.patch(`${API_URL}/timeline/posts/${idPost}`, ConfigToken(token), body);
+  return promise;
+}
