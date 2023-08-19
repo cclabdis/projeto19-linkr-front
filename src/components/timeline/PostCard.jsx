@@ -1,5 +1,7 @@
 import { styled } from "styled-components";
 import replace from 'react-string-replace';
+import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
+import { PiPencilBold } from 'react-icons/pi';
 
 export default function PostCard({ post }) {
     const desc = post.description;
@@ -15,10 +17,21 @@ export default function PostCard({ post }) {
 
     return (
         <Card data-test="post">
-            <img src={post.photo} alt="user" />
+            <ImgLikeContainer>
+                <img src={post.photo} alt="user" />
+                <AiOutlineHeart size={30} />
+            </ImgLikeContainer>
+
             <PostInfo>
-                <h1 data-test="username">{post.username}</h1>
+                <NameIconsContainer>
+                    <h1 data-test="username">{post.username}</h1>
+                    <div>
+                        <PiPencilBold size={20} color={"white"}/>
+                        <AiFillDelete size={20} />
+                    </div>
+                </NameIconsContainer>
                 <h2 data-test="description">{replacedDesc}</h2>
+
                 {Object.keys(post.linkMetadata).length !== 0
                     ?
                     <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
@@ -55,26 +68,32 @@ const Card = styled.div`
         box-sizing: border-box;
     }
 
-    >img {
-        flex: none;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
     @media (max-width: 768px) {
         width: 100%;
         border-radius: 0px;
     }
 `
 
-const PostInfo = styled.div`
+const ImgLikeContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 10px;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
+    gap: 20px;
+
+    img {
+        flex: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+`
+
+const NameIconsContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 
     h1 {
         font-family: Lato;
@@ -85,6 +104,19 @@ const PostInfo = styled.div`
         text-align: left;
         color: #ffffff;
     }
+
+    div {
+        display: flex;
+        gap: 10px;
+    }
+`
+
+const PostInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
 
     h2 {
         font-family: Lato;
