@@ -21,6 +21,15 @@ export default function getPosts(token) {
   return promise;
 }
 
+export const deletePost = async (postId, token) => {
+  try {
+    await axios.delete(`${API_URL}/timeline/${postId}`, ConfigToken(token));
+    return 
+  } catch (error) {
+    throw new AxiosError(error.message);
+  }
+};
+
 export async function updatePosts(token,idPost,body){
   const promise = axios.patch(`${API_URL}/timeline/posts/${idPost}`, ConfigToken(token), body);
   return promise;

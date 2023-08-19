@@ -38,7 +38,7 @@ export default function TimeLinePage() {
 
       <TitleTemplate texto={'timeline'}/>
       
-      <PublishBox onPublish={handlePublish} />
+      
       {/* Outro conteúdo da timeline aqui */}
       <Container>
         {isLoading ?
@@ -48,6 +48,7 @@ export default function TimeLinePage() {
           </LoadingContainer>
           :
           <PostsContainer>
+            <PublishBox onPublish={handlePublish} />
             {posts.map(p =>
               <PostCard post={p} key={p.id}/>
             )}
