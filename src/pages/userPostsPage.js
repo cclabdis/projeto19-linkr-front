@@ -7,7 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
 import TitleTemplate from "../components/common/titleTemplate";
-import getUserPosts from "../services/apiPosts";
+import apiHashtags from "../services/apiHashtags";
 
 export default function UserPostsPage() {
   const { username } = useParams();
@@ -18,7 +18,8 @@ export default function UserPostsPage() {
   useEffect(() => {
     setIsLoading(true);
     setListaPosts([]);
-    getUserPosts(username, user.token)
+    console.log({username, token: user.token})
+    apiHashtags.getUserPosts(username, user.token)
       .then((r) => {
         setListaPosts(r.data);
         setIsLoading(false);
@@ -57,23 +58,6 @@ const Container = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
-  }
-`;
-const TitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  margin-right: 740px;
-  margin-bottom: 40px;
-  h1 {
-    font-size: 43px;
-  }
-  @media (max-width: 1024px) {
-    margin-right: 500px;
-  }
-  @media (max-width: 768px) {
-    margin-right: 0px;
   }
 `;
 const LoadingContainer = styled.div`

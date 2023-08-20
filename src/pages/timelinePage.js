@@ -36,7 +36,7 @@ export default function TimeLinePage() {
   return (
     <TemplatePage>
 
-      <TitleTemplate texto={'timeline'}/>
+      <TitleTemplate/>
       
       
       {/* Outro conteúdo da timeline aqui */}

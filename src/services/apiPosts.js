@@ -19,11 +19,6 @@ export default function getPosts(token) {
   return promise;
 }
 
-export async function getUserPosts(username, token) {
-  const promise = axios.get(`${API_URL}/timeline/user/${username}`, ConfigToken(token));
-  return promise;
-}
-
 export const deletePost = async (postId, token) => {
   try {
     await axios.delete(`${API_URL}/timeline/${postId}`, ConfigToken(token));

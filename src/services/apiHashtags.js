@@ -13,6 +13,12 @@ function getPostsByHashtag(hashtag,token){
     return promise;
 }
 
+function getUserPosts(username, token) {
+    const promise = axios.get(`${API_URL}/timeline/user/${username}`, ConfigToken(token));
+    return promise;
+}
 
-const apiHashtags = {getTrending,getPostsByHashtag};
+
+
+const apiHashtags = {getTrending,getPostsByHashtag, getUserPosts};
 export default apiHashtags;
