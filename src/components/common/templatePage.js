@@ -1,11 +1,14 @@
-import Header from "./header";
+import Header from "./header/header.js";
 import SideBar from "./sideBar";
 
-export default function TemplatePage({children}){
-    return(
-        <>
-            <Header/>
-            {children}
-        </>
-    )
+export default function TemplatePage({ title, hasPublishBox, children }) {
+  return (
+    <>
+      <Header />
+      <div>{title}</div>
+      {hasPublishBox && <div>Publish Box</div>}
+      {children}
+      <SideBar />
+    </>
+  );
 }
