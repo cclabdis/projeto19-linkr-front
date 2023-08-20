@@ -34,7 +34,7 @@ export default function TimeLinePage() {
   };
 
   return (
-    <TemplatePage hasPublishBox={true}>
+    <TemplatePage>
 
       <TitleTemplate texto={'timeline'}/>
       

@@ -6,7 +6,7 @@ export default function UserPostsPage(){
     const {id} = useParams();
     return(
     <>
-        <TemplatePage hasPublishBox={false}>
+        <TemplatePage>
             <TitleTemplate texto={`${id}'s posts`}/>
             <>Posts do usuario {id} aqui...</>
         </TemplatePage>

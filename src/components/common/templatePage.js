@@ -1,12 +1,11 @@
 import Header from "./header";
 import SideBar from "./sideBar";
 
-export default function TemplatePage({ hasPublishBox, children}){
+export default function TemplatePage({children}){
     return(
         <>
             <Header/>
-                {(hasPublishBox) && <div>Publish Box</div>}
-                {children}
+            {children}
         </>
     )
 }
