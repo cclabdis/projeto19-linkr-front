@@ -31,7 +31,7 @@ export default function SideBar(){
 
     
     return (
-        <SideBarContainer data-test="trending">
+        <SideBarContainer>
             <TitleContainer className="Oswald">
                 trending
             </TitleContainer>
@@ -41,7 +41,7 @@ export default function SideBar(){
             </LoadingContainer>
             :
                 <ListContainer className="Lato">
-                    <ul>
+                    <ul data-test="trending">
                         {ComponentsList}
                     </ul>
                 </ListContainer>
