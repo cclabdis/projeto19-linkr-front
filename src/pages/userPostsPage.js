@@ -7,7 +7,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
 import TitleTemplate from "../components/common/titleTemplate";
-import getUserPosts from "../services/apiPosts";
 import apiHashtags from "../services/apiHashtags";
 
 export default function UserPostsPage() {

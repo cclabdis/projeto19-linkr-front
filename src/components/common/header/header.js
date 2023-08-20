@@ -77,8 +77,9 @@ export default function Header() {
       <HeaderSC>
         <h1 onClick={() => navigate("/timeline")}>linker</h1>
         {!isMobile && (
-          <DesktopInput>
+          <DesktopInputSC>
             <DebounceInput
+              data-test="search"
               type="text"
               placeholder={"Search for people"}
               value={searchValue}
@@ -90,7 +91,7 @@ export default function Header() {
               <SuggestionsDesktop>
                 <ul>
                   {suggestions.map((user) => (
-                    <li key={user.id} onClick={() => navigate(`/timeline/${user.username}`)}>
+                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}` )}>
                       <img src={user.photo} alt="User image"></img>
                       <p>{user.username}</p>
                     </li>
@@ -98,7 +99,7 @@ export default function Header() {
                 </ul>
               </SuggestionsDesktop>
             )}
-          </DesktopInput>
+          </DesktopInputSC>
         )}
         <div>
           {isDropdownOpen ? (
@@ -110,19 +111,20 @@ export default function Header() {
               <ArrowDown onClick={toggleDropdown} />
             </span>
           )}
-          <img src={user.photo} alt="Profile picture"></img>
+          <img data-test="avatar" src={user.photo} alt="Profile picture"></img>
         </div>
         {isDropdownOpen && (
           <span ref={dropdownRef}>
-            <Dropdown>
-              <p onClick={logout}>Logout</p>
+            <Dropdown data-test="menu">
+              <p data-test="logout" onClick={logout}>Logout</p>
             </Dropdown>
           </span>
         )}
       </HeaderSC>
       {isMobile && (
-        <MobileInput>
+        <MobileInputSC>
           <DebounceInput
+            data-test="search"          
             type="text"
             placeholder={"Search for people"}
             value={searchValue}
@@ -134,7 +136,7 @@ export default function Header() {
             <SuggestionsMobile>
               <ul>
                 {suggestions.map((user) => (
-                  <li key={user.id} onClick={() => navigate(`/timeline/${user.username}`)}>
+                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}`)}>
                     <img src={user.photo} alt="User image"></img>
                     <p>{user.username}</p>
                   </li>
@@ -142,7 +144,7 @@ export default function Header() {
               </ul>
             </SuggestionsMobile>
           )}
-        </MobileInput>
+        </MobileInputSC>
       )}
     </>
   );
@@ -259,7 +261,7 @@ const ArrowUp = styled(RiArrowUpSLine)`
   }
 `;
 
-const DesktopInput = styled.div`
+const DesktopInputSC = styled.div`
   width: 100%;
   height: 55px;
   position: relative;
@@ -282,7 +284,7 @@ const DesktopInput = styled.div`
   }
 `;
 
-const MobileInput = styled.div`
+const MobileInputSC = styled.div`
   width: 100%;
   height: 55px;
   position: relative;
