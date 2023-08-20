@@ -1,14 +1,18 @@
+import { styled } from "styled-components";
 import Header from "./header/header.js";
-import SideBar from "./sideBar";
 
-export default function TemplatePage({ title, hasPublishBox, children }) {
+
+export default function TemplatePage({children }) {
   return (
     <>
       <Header />
-      <div>{title}</div>
-      {hasPublishBox && <div>Publish Box</div>}
-      {children}
-      <SideBar />
+      <PaddingContainer>
+        {children}
+      </PaddingContainer>
     </>
   );
 }
+
+const PaddingContainer = styled.div`
+  padding-top: 20px;
+`

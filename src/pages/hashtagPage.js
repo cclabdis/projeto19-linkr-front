@@ -34,10 +34,6 @@ export default function HashatgPage(){
 
     return (
         <TemplatePage>
-
-
-
-
             <TitleContainer className="Oswald">
                 <h1 data-test="hashtag-title"># {hashtag}</h1>
             </TitleContainer>
