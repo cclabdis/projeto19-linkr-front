@@ -30,7 +30,7 @@ export const deletePost = async (postId, token) => {
   }
 };
 
-export async function updatePosts(token,idPost,body){
-  const promise = axios.patch(`${API_URL}/timeline/posts/${idPost}`, ConfigToken(token), body);
+export function updatePost(token, id, data) {
+  const promise = axios.patch(`${API_URL}/timeline/posts/${id}`,data, ConfigToken(token));
   return promise;
-}
+};

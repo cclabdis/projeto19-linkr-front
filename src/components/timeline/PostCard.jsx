@@ -7,22 +7,24 @@ import { handleDelete } from "./deleteCard";
 import { UserContext } from "../../contexts/userContext";
 import Modal from 'react-modal';
 import { RefreshContext } from "../../contexts/refreshContext";
-
+import { updatePost } from "../../services/apiPosts";
 
 export default function PostCard({ post }) {
+    const { user } = useContext(UserContext);
+    const token = user.token;
+
     const [desc, setDesc] = useState(post.description);
-    const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
+    const [replacedDesc] = useState(replace(desc, /#(\w+)/g, (match, i) => (
         <a key={i} href={`/hashtag/${match}`}>
             #{match}
         </a>
-    ));
+    )));
     const refreshContext = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
     };
 
-    const { user } = useContext(UserContext)
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
@@ -30,11 +32,36 @@ export default function PostCard({ post }) {
 
     /// edit post///
     const [isEditing, setIsEditing] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const editRef = useRef();
 
-    const editPost = () => {
-        setIsEditing(true);
-    }
+    useEffect(() => {
+        if(isEditing) { editRef.current.focus();  };
+    }, [isEditing]);
+
+    const handlePress = e => {
+        if(e.key === "Escape") {
+             setIsEditing(false);
+             setDesc(post.description);
+        } else if (e.key === "Enter" ) {
+             setSubmitting(true);
+             handleSubmit();
+        }
+     };
+
+     function handleSubmit(){
+        const data = {description: desc, hashtagsList: desc.split(" ").filter(c => c[0] === '#')};
+        updatePost(token, post.id, data)
+        .then(() => {
+            setIsEditing(false);
+            window.location.reload();
+            })
+        .catch(err => {
+            console.log(err.message);
+            alert(`The changes couldn't be saved! Error: ${err.message}`);
+        })
+        setSubmitting(true);
+     };
 
     return (
 
@@ -47,11 +74,13 @@ export default function PostCard({ post }) {
             <PostInfo>
                 <NameIconsContainer>
                     <h1 data-test="username">{post.username}</h1>
-                    <div>
-                        <PiPencilBold size={20} color={"white"} onClick={editPost} />
-                        {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
-                        <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
-                    </div>
+                    {post.user_id === user.id && 
+                        <div>
+                            <PiPencilBold size={20} color={"white"} onClick={() => setIsEditing(!isEditing)} />
+                            {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
+                            <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
+                        </div>
+                    }
                     <Modal
                         isOpen={isModalOpen}
                         onRequestClose={() => setIsModalOpen(false)}
@@ -89,6 +118,8 @@ export default function PostCard({ post }) {
                     ?
                     <EditDescription >
                         <input
+                            disabled={submitting}
+                            onKeyDown={(e) => handlePress(e)}
                             ref={editRef}
                             type="text"
                             value={desc}
@@ -309,7 +340,16 @@ const EditDescription = styled.div`
     width: 100%;
 
     input {
+        overflow-wrap: break-word;
         width: 100%;
+        min-height: 30px;
+        font-family: Lato;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 17px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #4C4C4C;
     }
 `
 
