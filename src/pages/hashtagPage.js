@@ -33,7 +33,7 @@ export default function HashatgPage(){
     
 
     return (
-        <TemplatePage hasPublishBox={false}>
+        <TemplatePage>
 
 
 
