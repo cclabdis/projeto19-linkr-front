@@ -49,9 +49,10 @@ export default function TimeLinePage() {
           :
           <PostsContainer>
             <PublishBox onPublish={handlePublish} />
-            {posts.map(p =>
-              <PostCard post={p} key={p.id}/>
-            )}
+              {posts.length === 0 && <MessageContainer data-test="message" className="Oswald">There are no posts yet</MessageContainer>}
+              {posts.map(p =>
+                <PostCard post={p} key={p.id}/>
+              )}
           </PostsContainer>
         }
         <SideBar />
@@ -92,4 +93,14 @@ const LoadingContainer = styled.div`
     h1{
       font-size: 35px;
     }
+`
+
+const MessageContainer = styled.div`
+  min-width: 611px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 400;
+
 `
