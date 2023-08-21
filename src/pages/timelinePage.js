@@ -23,6 +23,7 @@ export default function TimeLinePage() {
         setIsLoading(false);
       })
       .catch((err) => {
+        alert(err);
         console.log(err.message);
         setIsLoading(false);
       })

@@ -41,6 +41,35 @@ export default function PostCard({ post }) {
             <ImgLikeContainer>
                 <img src={post.photo} alt="user" />
                 <AiOutlineHeart size={30} />
+
+                {likesInfo.liked
+                    ? <AiFillHeart
+                        data-test="like-btn"
+                        size={30}
+                        color="red"
+                        onClick={handleLike}
+                        cursor="pointer"
+                    />
+                    : <AiOutlineHeart
+                        data-test="like-btn"
+                        size={30}
+                        onClick={handleLike}
+                        cursor="pointer"
+                    />
+                }
+                <Tooltip
+                    id={`tooltip-${post.id}`}
+                    render={() => <p
+                            data-test="tooltip"
+                        >
+                            {likesInfo.users.length > 0
+                                ? content(likesInfo.users, user.id)
+                                : "No one liked this post yet"}
+                        </p>}
+                />
+                    <p
+                        data-tooltip-id={`tooltip-${post.id}`}
+                    >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
             </ImgLikeContainer>
 
             <PostInfo>
@@ -99,11 +128,11 @@ export default function PostCard({ post }) {
 
                 {Object.keys(post.linkMetadata).length !== 0
                     ?
-                    <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
+                    <LinkContainer onClick={() => openInNewTab(post.link)}>
                         <div>
                             <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
-                            <h5>{post.link}</h5>
+                            <a id="link-post" href={post.link} data-test="link">{post.link}</a>
                         </div>
                         <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                     </LinkContainer>
