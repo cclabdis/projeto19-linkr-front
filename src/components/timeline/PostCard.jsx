@@ -26,17 +26,21 @@ export default function PostCard({ post }) {
     const token = user.token;
 
     const [desc, setDesc] = useState(post.description);
-    const [replacedDesc] = useState(replace(desc, /#(\w+)/g, (match, i) => (
-        <a key={i} href={`/hashtag/${match}`}>
-            #{match}
-        </a>
-    )));
+    const replaced = desc => {
+        return replace(desc, /#(\w+)/g, (match, i) => (
+            <a key={i} href={`/hashtag/${match}`}>
+                #{match}
+            </a>
+        ))
+    }
+    const [replacedDesc, setReplaced] = useState(replaced(desc));
+
     const [likesInfo, setLikesInfo] = useState({
         liked: post['has_liked'],
         count: Number(post['like_count']),
         users: post['likes_users'] || [],
     });
-    const refreshContext = useContext(RefreshContext);
+    const {refresh, setRefresh} = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
@@ -62,7 +66,7 @@ export default function PostCard({ post }) {
              setDesc(post.description);
         } else if (e.key === "Enter" ) {
              setSubmitting(true);
-             handleSubmit();
+             handleSubmit()
         }
      };
 
@@ -86,13 +90,14 @@ export default function PostCard({ post }) {
         updatePost(token, post.id, data)
         .then(() => {
             setIsEditing(false);
-            window.location.reload();
+            setReplaced(replaced(desc));
+            setRefresh(!refresh);
             })
         .catch(err => {
             console.log(err.message);
             alert(`The changes couldn't be saved! Error: ${err.message}`);
         })
-        setSubmitting(true);
+        setSubmitting(false);
      };
 
     return (
@@ -170,7 +175,7 @@ export default function PostCard({ post }) {
 
                             <div>
                                 <button data-test="cancel" onClick={() => setIsModalOpen(false)}>No, go back</button>
-                                <button data-test="confirm" onClick={() => handleDelete(post.id, user.token, refreshContext, setIsModalOpen)}>Yes, delete it</button>
+                                <button data-test="confirm" onClick={() => handleDelete(post.id, user.token, setIsModalOpen)}>Yes, delete it</button>
 
                             </div>
                         </ModalContent>

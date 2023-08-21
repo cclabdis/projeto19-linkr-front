@@ -1,6 +1,6 @@
 import { deletePost } from "../../services/apiPosts";
 
-export const handleDelete = async (postId, token, refreshContext, setIsModalOpen) => {
+export const handleDelete = async (postId, token, setIsModalOpen) => {
 
 try {
     await deletePost(postId, token);
