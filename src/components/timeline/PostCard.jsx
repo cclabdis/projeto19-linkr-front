@@ -1,45 +1,27 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-
 import { styled } from "styled-components";
+import replace from 'react-string-replace';
 import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
 import { PiPencilBold } from 'react-icons/pi';
-import { Tooltip } from "react-tooltip";
-
-import replace from 'react-string-replace';
-
-import Modal from 'react-modal';
-
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { handleDelete } from "./deleteCard";
 import { UserContext } from "../../contexts/userContext";
+import Modal from 'react-modal';
 import { RefreshContext } from "../../contexts/refreshContext";
 
-import { handleDelete } from "./deleteCard";
-
-import { updatePost } from "../../services/apiPosts";
-import apiLikes from "../../services/apiLikes";
-
-import content from "../../helpers/toolTipContent";
-
 export default function PostCard({ post }) {
-    const { user } = useContext(UserContext);
-    const token = user.token;
-
     const [desc, setDesc] = useState(post.description);
-    const [replacedDesc] = useState(replace(desc, /#(\w+)/g, (match, i) => (
+    const replacedDesc = replace(desc, /#(\w+)/g, (match, i) => (
         <a key={i} href={`/hashtag/${match}`}>
             #{match}
         </a>
-    )));
-    const [likesInfo, setLikesInfo] = useState({
-        liked: post['has_liked'],
-        count: Number(post['like_count']),
-        users: post['likes_users'] || [],
-    });
+    ));
     const refreshContext = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
     };
 
+    const { user } = useContext(UserContext)
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
@@ -47,105 +29,27 @@ export default function PostCard({ post }) {
 
     /// edit post///
     const [isEditing, setIsEditing] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
     const editRef = useRef();
 
-    useEffect(() => {
-        if(isEditing) { editRef.current.focus();  };
-    }, [isEditing]);
-
-    const handlePress = e => {
-        if(e.key === "Escape") {
-             setIsEditing(false);
-             setDesc(post.description);
-        } else if (e.key === "Enter" ) {
-             setSubmitting(true);
-             handleSubmit();
-        }
-     };
-
-    const handleLike = async () => {
-        try {
-            await apiLikes(likesInfo.liked, (likesInfo.liked ? `/deslike/` : `/like/`) +  `${post.id}`, user.token);
-            setLikesInfo(prev => ({
-                liked: !prev.liked,
-                count: prev.count + (prev.liked ? -1 : 1),
-                users: prev.liked
-                    ? prev.users.filter(u => u['user_id'] !== user.id)
-                    : [...prev.users, { user_id: user.id, username: user.username }]
-            }));
-        } catch ({ message }) {
-            console.log(message);
-        }
+    const editPost = () => {
+        setIsEditing(true);
     }
-
-     function handleSubmit(){
-        const data = {description: desc, hashtagsList: desc.split(" ").filter(c => c[0] === '#')};
-        updatePost(token, post.id, data)
-        .then(() => {
-            setIsEditing(false);
-            window.location.reload();
-            })
-        .catch(err => {
-            console.log(err.message);
-            alert(`The changes couldn't be saved! Error: ${err.message}`);
-        })
-        setSubmitting(true);
-     };
-
-     function setDataTest() {
-        setTimeout(() => {
-            const tooltip = document.getElementById(`tooltip-${post.id}`);
-            if(tooltip) {
-                tooltip.setAttribute("data-test", "tooltip");
-            }
-        }, 300);
-     }
 
     return (
 
         <Card data-test="post">
             <ImgLikeContainer>
                 <img src={post.photo} alt="user" />
-                {likesInfo.liked
-                    ? <AiFillHeart
-                        data-test="like-btn"
-                        size={30}
-                        color="red"
-                        onClick={handleLike}
-                        cursor="pointer"
-                    />
-                    : <AiOutlineHeart
-                        data-test="like-btn"
-                        size={30}
-                        onClick={handleLike}
-                        cursor="pointer"
-                    />
-                }
-                <Tooltip
-                    id={`tooltip-${post.id}`}
-                />
-                <div
-                    onMouseEnter={setDataTest}
-                    data-test="counter"
-                    data-tooltip-id={`tooltip-${post.id}`}
-                    data-tooltip-content={
-                        likesInfo.users.length > 0 ? content(likesInfo.users, user.id) : "No one liked this post yet"
-                }>
-                    <p>{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
-                </div>
+                <AiOutlineHeart size={30} />
             </ImgLikeContainer>
 
             <PostInfo>
                 <NameIconsContainer>
                     <h1 data-test="username">{post.username}</h1>
-                    {post.user_id === user.id &&
-                        <div>
-                            <PiPencilBold size={20} color={"white"} onClick={() => setIsEditing(!isEditing)} />
-                            {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
-                            <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
-                        </div>
-                    }
+                    <div>
+                        <PiPencilBold data-test="edit-btn" size={20} color={"white"} onClick={editPost} />
+                        <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
+                    </div>
                     <Modal
                         isOpen={isModalOpen}
                         onRequestClose={() => setIsModalOpen(false)}
@@ -183,8 +87,6 @@ export default function PostCard({ post }) {
                     ?
                     <EditDescription >
                         <input
-                            disabled={submitting}
-                            onKeyDown={(e) => handlePress(e)}
                             ref={editRef}
                             type="text"
                             value={desc}
@@ -405,16 +307,7 @@ const EditDescription = styled.div`
     width: 100%;
 
     input {
-        overflow-wrap: break-word;
         width: 100%;
-        min-height: 30px;
-        font-family: Lato;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 17px;
-        letter-spacing: 0em;
-        text-align: left;
-        color: #4C4C4C;
     }
 `
 
