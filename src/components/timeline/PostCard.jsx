@@ -201,7 +201,7 @@ export default function PostCard({ post }) {
                         <div>
                             <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
-                            <h5 data-test="link">{post.link}</h5>
+                            <a id="link-post" href={post.link} data-test="link">{post.link}</a>
                         </div>
                         <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                     </LinkContainer>
