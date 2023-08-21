@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { styled } from "styled-components";
 import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
@@ -20,6 +21,7 @@ import apiLikes from "../../services/apiLikes";
 import content from "../../helpers/toolTipContent";
 
 export default function PostCard({ post }) {
+    const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const token = user.token;
 
@@ -124,13 +126,13 @@ export default function PostCard({ post }) {
                         </p>}
                 />
                     <p
-                        data-tooltip-id={`tooltip-${post.id}`}
+                        data-tooltip-id={`tooltip-${post.id}`} data-test="counter"
                     >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
             </ImgLikeContainer>
 
             <PostInfo>
                 <NameIconsContainer>
-                    <h1 data-test="username">{post.username}</h1>
+                    <h1 data-test="username" onClick={() => navigate(`/user/${post.user_id}`)}>{post.username}</h1>
                     {post.user_id === user.id &&
                         <div>
                             <PiPencilBold
@@ -264,6 +266,10 @@ const NameIconsContainer = styled.div`
         letter-spacing: 0em;
         text-align: left;
         color: #ffffff;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     div {
