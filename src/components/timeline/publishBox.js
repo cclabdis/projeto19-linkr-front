@@ -27,7 +27,9 @@ export default function PublishBox({ onPublish }) {
 
       setLink("");
       setDescription("");
+      window.location.reload();
     } catch (error) {
+      alert(error.message || error);
       setErrorMessage("Houve um erro ao publicar seu link");
     } finally {
       setIsPublishing(false);
@@ -78,9 +80,9 @@ const PublishBoxContainer = styled.div`
 const SharePrompt = styled.p`
   color: #707070;
   font-size: 24px;
-  height: 40px
-  top: 253px
-  left: 327px
+  height: 40px;
+  top: 253px;
+  left: 327px;
 
 `;
 
