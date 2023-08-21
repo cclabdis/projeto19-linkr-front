@@ -124,16 +124,17 @@ export default function PostCard({ post }) {
                 }
                 <Tooltip
                     id={`tooltip-${post.id}`}
+                    render={() => <p
+                            data-test="tooltip"
+                        >
+                            {likesInfo.users.length > 0
+                                ? content(likesInfo.users, user.id)
+                                : "No one liked this post yet"}
+                        </p>}
                 />
-                <div
-                    onMouseEnter={setDataTest}
-                    data-test="counter"
-                    data-tooltip-id={`tooltip-${post.id}`}
-                    data-tooltip-content={
-                        likesInfo.users.length > 0 ? content(likesInfo.users, user.id) : "No one liked this post yet"
-                }>
-                    <p>{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
-                </div>
+                    <p
+                        data-tooltip-id={`tooltip-${post.id}`}
+                    >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
             </ImgLikeContainer>
 
             <PostInfo>
