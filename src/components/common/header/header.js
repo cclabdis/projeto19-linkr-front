@@ -91,7 +91,7 @@ export default function Header() {
               <SuggestionsDesktop>
                 <ul>
                   {suggestions.map((user) => (
-                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}` )}>
+                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}` )}>
                       <img src={user.photo} alt="User image" ></img>
                       <p>{user.username}</p>
                     </li>
@@ -136,7 +136,7 @@ export default function Header() {
             <SuggestionsMobile>
               <ul>
                 {suggestions.map((user) => (
-                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}`)}>
+                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}`)}>
                     <img data-test="avatar" src={user.photo} alt="User image" onClick={toggleDropdown} ></img>
                     <p>{user.username}</p>
                   </li>

@@ -10,29 +10,35 @@ import TitleTemplate from "../components/common/titleTemplate";
 import apiHashtags from "../services/apiHashtags";
 
 export default function UserPostsPage() {
-  const { username } = useParams();
+  const { id } = useParams();
   const { user } = useContext(UserContext);
   const [listaPosts, setListaPosts] = useState([]);
+  const [userName, setUserName] = useState("__");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     setListaPosts([]);
-    console.log({username, token: user.token})
-    apiHashtags.getUserPosts(username, user.token)
+    setUserName("");
+    apiHashtags.getUserPosts(id, user.token)
       .then((r) => {
+        console.log(r.data);
         setListaPosts(r.data);
         setIsLoading(false);
+        if(r.data[0].username){
+          setUserName(r.data[0].username)      
+        }
       })
       .catch((err) => {
         console.log(err.message);
         setIsLoading(false);
       });
-  }, []);
+  }, [id]);
 
   return (
     <TemplatePage>
-      <TitleTemplate texto={`${username}'s posts`} />
+      {userName !== ""  && <TitleTemplate texto={`${userName}'s posts`} />} 
+
       <Container>
         <PostsContainer>
           {isLoading ? (
