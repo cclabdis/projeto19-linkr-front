@@ -197,11 +197,11 @@ export default function PostCard({ post }) {
 
                 {Object.keys(post.linkMetadata).length !== 0
                     ?
-                    <LinkContainer data-test="link" onClick={() => openInNewTab(post.link)}>
+                    <LinkContainer onClick={() => openInNewTab(post.link)}>
                         <div>
                             <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
                             <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
-                            <h5>{post.link}</h5>
+                            <h5 data-test="link">{post.link}</h5>
                         </div>
                         <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                     </LinkContainer>
