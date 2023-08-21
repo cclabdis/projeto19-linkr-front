@@ -29,7 +29,6 @@ export default function TimeLinePage() {
   }, []);
 
   const handlePublish = (newPost) => {
-    // Aqui você pode implementar a lógica para adicionar a nova publicação à timeline
     console.log("Nova publicação:", newPost);
   };
 
