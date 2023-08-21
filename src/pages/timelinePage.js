@@ -9,12 +9,14 @@ import SideBar from "../components/common/sideBar";
 import getPosts from "../services/apiPosts";
 import ClipLoader from "react-spinners/ClipLoader";
 import TitleTemplate from "../components/common/titleTemplate";
+import { RefreshContext } from "../contexts/refreshContext";
 
 export default function TimeLinePage() {
   const { user } = useContext(UserContext);
   const token = user.token;
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const {refresh} = useContext(RefreshContext);
 
   useEffect(() => {
     getPosts(token)
