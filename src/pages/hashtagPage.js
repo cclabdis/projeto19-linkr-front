@@ -33,11 +33,7 @@ export default function HashatgPage(){
     
 
     return (
-        <TemplatePage hasPublishBox={false}>
-
-
-
-
+        <TemplatePage>
             <TitleContainer className="Oswald">
                 <h1 data-test="hashtag-title"># {hashtag}</h1>
             </TitleContainer>

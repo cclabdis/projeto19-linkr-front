@@ -29,9 +29,11 @@ export default function PublishBox({ onPublish }) {
 
       setLink("");
       setDescription("");
+      window.location.reload();
     } catch ({ message }) {
-      alert(message?.data || message);
-  } finally {
+      alert("There was an error publishing your link");
+      console.log(message);
+    } finally {
       setIsPublishing(false);
     }
   };
@@ -80,9 +82,9 @@ const PublishBoxContainer = styled.div`
 const SharePrompt = styled.p`
   color: #707070;
   font-size: 24px;
-  height: 40px
-  top: 253px
-  left: 327px
+  height: 40px;
+  top: 253px;
+  left: 327px;
 
 `;
 
