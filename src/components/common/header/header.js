@@ -91,8 +91,8 @@ export default function Header() {
               <SuggestionsDesktop>
                 <ul>
                   {suggestions.map((user) => (
-                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}` )}>
-                      <img src={user.photo} alt="User image"></img>
+                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}` )}>
+                      <img src={user.photo} alt="User image" ></img>
                       <p>{user.username}</p>
                     </li>
                   ))}
@@ -101,17 +101,17 @@ export default function Header() {
             )}
           </DesktopInputSC>
         )}
-        <div>
+        <div ref={arrowRef} >
           {isDropdownOpen ? (
-            <span ref={arrowRef}>
-              <ArrowUp onClick={toggleDropdown} />
+            <span>
+              <ArrowUp />
             </span>
           ) : (
-            <span ref={arrowRef}>
-              <ArrowDown onClick={toggleDropdown} />
+            <span>
+              <ArrowDown />
             </span>
           )}
-          <img data-test="avatar" src={user.photo} alt="Profile picture"></img>
+          <img data-test="avatar" src={user.photo} alt="Profile picture" onClick={toggleDropdown} ></img>
         </div>
         {isDropdownOpen && (
           <span ref={dropdownRef}>
@@ -136,8 +136,8 @@ export default function Header() {
             <SuggestionsMobile>
               <ul>
                 {suggestions.map((user) => (
-                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/timeline/${user.username}`)}>
-                    <img src={user.photo} alt="User image"></img>
+                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}`)}>
+                    <img data-test="avatar" src={user.photo} alt="User image" onClick={toggleDropdown} ></img>
                     <p>{user.username}</p>
                   </li>
                 ))}

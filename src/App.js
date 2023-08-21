@@ -17,7 +17,7 @@ export default function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/sign-up" element={<SignupPage />} />
             <Route path="/timeline" element={<TimeLinePage />} />
-            <Route path="/timeline/:username" element={<UserPostsPage />} />
+            <Route path="/user/:id" element={<UserPostsPage />} />
             <Route path="/hashtag/:hashtag" element={<HashatgPage />} />
           </Routes>
         </UserProvider>
