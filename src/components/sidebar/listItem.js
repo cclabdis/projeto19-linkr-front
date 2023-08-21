@@ -13,7 +13,7 @@ export default function ListItem({hashtag}){
 
     
     return(
-        <ListItemContainer  onClick={()=>handleRedirect(hashtag)} ># {hashtag}</ListItemContainer>
+        <ListItemContainer  onClick={()=>handleRedirect(hashtag)} >#{hashtag}</ListItemContainer>
     )
 }
 

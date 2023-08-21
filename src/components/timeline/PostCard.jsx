@@ -93,15 +93,6 @@ export default function PostCard({ post }) {
         setSubmitting(true);
      };
 
-     function setDataTest() {
-        setTimeout(() => {
-            const tooltip = document.getElementById(`tooltip-${post.id}`);
-            if(tooltip) {
-                tooltip.setAttribute("data-test", "tooltip");
-            }
-        }, 300);
-     }
-
     return (
 
         <Card data-test="post">
@@ -142,7 +133,12 @@ export default function PostCard({ post }) {
                     <h1 data-test="username">{post.username}</h1>
                     {post.user_id === user.id &&
                         <div>
-                            <PiPencilBold size={20} color={"white"} onClick={() => setIsEditing(!isEditing)} />
+                            <PiPencilBold
+                                size={20}
+                                color={"white"}
+                                onClick={() => setIsEditing(!isEditing)}
+                                data-test="edit-btn"
+                            />
                             {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
                             <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
                         </div>
@@ -184,6 +180,7 @@ export default function PostCard({ post }) {
                     ?
                     <EditDescription >
                         <input
+                            data-test="edit-input"
                             disabled={submitting}
                             onKeyDown={(e) => handlePress(e)}
                             ref={editRef}
