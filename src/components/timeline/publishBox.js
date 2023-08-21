@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { createPost } from "../../services/apiPosts";
 import { UserContext } from "../../contexts/userContext";
 import { styled } from "styled-components";
+// import ClipLoader from "react-spinners/ClipLoader";
+// import { RefreshContext } from "../../contexts/refreshContext";
 
 export default function PublishBox({ onPublish }) {
   const [link, setLink] = useState("");
@@ -27,9 +29,9 @@ export default function PublishBox({ onPublish }) {
 
       setLink("");
       setDescription("");
-    } catch (error) {
-      setErrorMessage("Houve um erro ao publicar seu link");
-    } finally {
+    } catch ({ message }) {
+      alert(message?.data || message);
+  } finally {
       setIsPublishing(false);
     }
   };
