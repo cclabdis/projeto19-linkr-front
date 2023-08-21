@@ -19,7 +19,7 @@ const content = (usersList, userId) => {
             return usersList.map(u => u.username || "Fulano").join(" and ");
         } else {
             return (usersList[0]?.username || "Fulano")
-            + ", " + (usersList[0]?.username || "Fulano")
+            + ", " + (usersList[1]?.username || "Ciclano")
             + " and other " + (n - 2).toString() + " people";
         }
     }
