@@ -22,6 +22,7 @@ export default function TimeLinePage() {
     getPosts(token)
       .then((r) => {
         setPosts(r.data);
+        console.log(r.data);
         setIsLoading(false);
       })
       .catch((err) => {

@@ -137,7 +137,7 @@ export default function PostCard({ post }) {
 
             <PostInfo>
                 <NameIconsContainer>
-                    <h1 data-test="username" onClick={() => navigate(`/user/${post.user_id}`)}>{post.username}</h1>
+                    <h1 data-test="username" onClick={() => navigate(`/user/${post.user_id || post.posterid}`)}>{post.username}</h1>
                     {post.user_id === user.id &&
                         <div>
                             <PiPencilBold
