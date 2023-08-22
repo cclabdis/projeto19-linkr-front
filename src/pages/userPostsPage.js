@@ -7,7 +7,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
 import apiHashtags from "../services/apiHashtags";
-import FollowButton from "../components/userPage/followButton";
 import UserPageTitle from "../components/userPage/userPageTitle";
 
 export default function UserPostsPage() {
@@ -23,7 +22,6 @@ export default function UserPostsPage() {
     setUserData({username:'',photo:''});
     apiHashtags.getUserPosts(id, user.token)
       .then((r) => {
-        console.log(r.data);
         setListaPosts(r.data);
         setIsLoading(false);
         if(r.data[0].username){
