@@ -6,27 +6,28 @@ import { UserContext } from "../contexts/userContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
-import TitleTemplate from "../components/common/titleTemplate";
 import apiHashtags from "../services/apiHashtags";
+import FollowButton from "../components/userPage/followButton";
+import UserPageTitle from "../components/userPage/userPageTitle";
 
 export default function UserPostsPage() {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const [listaPosts, setListaPosts] = useState([]);
-  const [userName, setUserName] = useState("__");
+  const [userData, setUserData] = useState({username:'',photo:''});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     setListaPosts([]);
-    setUserName("");
+    setUserData({username:'',photo:''});
     apiHashtags.getUserPosts(id, user.token)
       .then((r) => {
         console.log(r.data);
         setListaPosts(r.data);
         setIsLoading(false);
         if(r.data[0].username){
-          setUserName(r.data[0].username)      
+          setUserData({username:r.data[0].username,photo:r.data[0].photo})      
         }
       })
       .catch((err) => {
@@ -37,7 +38,7 @@ export default function UserPostsPage() {
 
   return (
     <TemplatePage>
-      {userName !== ""  && <TitleTemplate texto={`${userName}'s posts`} />} 
+      {userData.username !== ''  && <UserPageTitle texto={`${userData.username}'s posts`} foto={userData.photo}/>} 
 
       <Container>
         <PostsContainer>
