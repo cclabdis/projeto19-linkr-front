@@ -1,13 +1,33 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { styled } from "styled-components"
-export default function FollowButton({isFolowing}){
+import apiFollow from "../../services/apiFollow";
+import { UserContext } from "../../contexts/userContext";
+
+export default function FollowButton({isFollowing, userId}){
+    const {user} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
+    const [followState, setFollowState] = useState(isFollowing);
+
+    async function handleClick(){
+        setIsLoading(true);
+        apiFollow.FollowUser(user.token,userId)
+            .then((resp)=>{
+                setFollowState(resp.data);
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+            .finally(()=>{
+                setIsLoading(false); 
+            }); 
+    }
+
     return(
         isLoading
-            ? <DisableButton>loading...</DisableButton>
-            :isFolowing
-            ? <UnfollowBtn>Unfollow</UnfollowBtn>
-            : <FollowBtn className="Lato">Follow</FollowBtn>
+            ? <DisableButton className="Lato">loading...</DisableButton>
+            :followState
+            ? <UnfollowBtn className="Lato" onClick={handleClick} data-test="follow-btn">Unfollow</UnfollowBtn>
+            : <FollowBtn className="Lato" onClick={handleClick} data-test="follow-btn">Follow</FollowBtn>
     )
 }
 

@@ -1,14 +1,13 @@
 import { useParams } from "react-router-dom";
-import TemplatePage from "../components/common/templatePage";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { UserContext } from "../contexts/userContext";
 import ClipLoader from "react-spinners/ClipLoader";
+import { UserContext } from "../contexts/userContext";
+import TemplatePage from "../components/common/templatePage";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
-import apiHashtags from "../services/apiHashtags";
-import FollowButton from "../components/userPage/followButton";
 import UserPageTitle from "../components/userPage/userPageTitle";
+import apiHashtags from "../services/apiHashtags";
 
 export default function UserPostsPage() {
   const { id } = useParams();
@@ -23,7 +22,7 @@ export default function UserPostsPage() {
     setUserData({username:'',photo:''});
     apiHashtags.getUserPosts(id, user.token)
       .then((r) => {
-        console.log(r.data);
+
         setListaPosts(r.data);
         setIsLoading(false);
         if(r.data[0].username){
@@ -38,7 +37,7 @@ export default function UserPostsPage() {
 
   return (
     <TemplatePage>
-      {userData.username !== ''  && <UserPageTitle texto={`${userData.username}'s posts`} foto={userData.photo}/>} 
+      { <UserPageTitle userId={id}/>} 
 
       <Container>
         <PostsContainer>

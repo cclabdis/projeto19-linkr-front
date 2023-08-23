@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router";
 import { styled } from "styled-components";
-import ListItem from "../sidebar/listItem";
+import ListItem from "../../styles/ComponentStyles/listItem";
 import { useContext, useEffect, useState } from "react";
 import apiHashtags from "../../services/apiHashtags";
-import ClipLoader from "react-spinners/ClipLoader";
+import { MoonLoader } from "react-spinners";
 import { RefreshContext } from "../../contexts/refreshContext";
 
 export default function SideBar(){
@@ -37,7 +36,11 @@ export default function SideBar(){
             </TitleContainer>
             {isLoading ?
             <LoadingContainer>
-                <ClipLoader color="#fff" size={150}/>
+                <MoonLoader
+                    color="rgba(255,255,255, 1)"
+                    size={100}
+                    speedMultiplier={0.5}
+                />
             </LoadingContainer>
             :
                 <ListContainer className="Lato">
