@@ -24,6 +24,7 @@ export default function UserPageTitle({userId}){
             console.log(err.message);
         })
         .finally(()=>{
+            setIsYou(user.id === parseInt(userId));
             setIsLoading(false);
         });
     },[userId]);
@@ -50,7 +51,7 @@ export default function UserPageTitle({userId}){
                         </UserContainer>
                         {!(isYou) &&
                             <ButtonContainer>
-                                <FollowButton isFollowing={userInfos.isFollowing} userId={userInfos.id}/>
+                                <FollowButton isFollowing={userInfos.isFollowing} userId={userInfos.id} data-test="follow-btn"/>
                             </ButtonContainer>
                         }
                     </PositionContainerSC>)

@@ -91,9 +91,10 @@ export default function Header() {
               <SuggestionsDesktop>
                 <ul>
                   {suggestions.map((user) => (
-                    <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}` )}>
+                    <li data-test="user-search" className="Lato" key={user.id} onClick={() => navigate(`/user/${user.id}` )}>
                       <img src={user.photo} alt="User image" ></img>
                       <p>{user.username}</p>
+                      {user.isFollowing && <span>• following</span>}
                     </li>
                   ))}
                 </ul>
@@ -136,7 +137,7 @@ export default function Header() {
             <SuggestionsMobile>
               <ul>
                 {suggestions.map((user) => (
-                  <li data-test="user-search" key={user.id} onClick={() => navigate(`/user/${user.id}`)}>
+                  <li data-test="user-search" className="Lato" key={user.id} onClick={() => navigate(`/user/${user.id}`)}>
                     <img data-test="avatar" src={user.photo} alt="User image" onClick={toggleDropdown} ></img>
                     <p>{user.username}</p>
                   </li>
@@ -180,11 +181,16 @@ const SuggestionsDesktop = styled.div`
         margin-left: 10px;
         cursor: pointer;
         color: #515151;
-        font-family: Lato;
         font-size: 19px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
+      }
+      span{
+        color: #c5c5c5;
+        font-size: 19px;
+        font-weight: 400;
+        margin-left: 7px;
       }
       img {
         margin-left: 10px;
@@ -274,13 +280,26 @@ const DesktopInputSC = styled.div`
     height: 45px;
     border: none;
     border-radius: 8px;
+    padding-left: 17px;
     background: #ffffff;
-    color: #c6c6c6;
+    color: #515151;
     font-family: Lato;
     font-size: 19px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    box-sizing: border-box;
+    &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #C6C6C6;
+   }
+
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: #C6C6C6;
+    }
+
+    &::-ms-input-placeholder { /* Microsoft Edge */
+      color: #C6C6C6;
+    }
   }
 `;
 

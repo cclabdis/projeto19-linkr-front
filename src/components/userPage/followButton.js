@@ -15,6 +15,7 @@ export default function FollowButton({isFollowing, userId}){
                 setFollowState(resp.data);
             })
             .catch((err)=>{
+                alert("Erro no servidor, tente novamente mais tarde!");
                 console.log(err);
             })
             .finally(()=>{
@@ -24,10 +25,10 @@ export default function FollowButton({isFollowing, userId}){
 
     return(
         isLoading
-            ? <DisableButton className="Lato">loading...</DisableButton>
+            ? <DisableButton className="Lato" disabled>loading...</DisableButton>
             :followState
-            ? <UnfollowBtn className="Lato" onClick={handleClick} data-test="follow-btn">Unfollow</UnfollowBtn>
-            : <FollowBtn className="Lato" onClick={handleClick} data-test="follow-btn">Follow</FollowBtn>
+            ? <UnfollowBtn className="Lato" onClick={handleClick}>Unfollow</UnfollowBtn>
+            : <FollowBtn className="Lato" onClick={handleClick}>Follow</FollowBtn>
     )
 }
 
