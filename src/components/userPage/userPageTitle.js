@@ -26,7 +26,7 @@ export default function UserPageTitle({userId}){
         .finally(()=>{
             setIsLoading(false);
         });
-    },[]);
+    },[userId]);
     
     return (
         <TitleContainer>
