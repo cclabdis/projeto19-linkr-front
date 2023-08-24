@@ -1,14 +1,22 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
+
+import { styled } from "styled-components";
+import ClipLoader from "react-spinners/ClipLoader";
+
 import { UserContext } from "../contexts/userContext";
+import { RefreshContext } from "../contexts/refreshContext";
+
 import TemplatePage from "../components/common/templatePage";
+import TitleTemplate from "../components/common/titleTemplate";
+import SideBar from "../components/common/sideBar";
+
 import PublishBox from "../components/timeline/publishBox"; // Importe o PublishBox
 import PostCard from "../components/timeline/PostCard.jsx";
-import { styled } from "styled-components";
-import SideBar from "../components/common/sideBar";
+import PostsNotifier from "../components/timeline/postsNotifier";
+
 import getPosts from "../services/apiPosts";
-import ClipLoader from "react-spinners/ClipLoader";
-import TitleTemplate from "../components/common/titleTemplate";
+import useNotifier from "../hooks/useNotifier";
 
 export default function TimeLinePage() {
   const { user } = useContext(UserContext);
@@ -16,18 +24,26 @@ export default function TimeLinePage() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { refresh, setRefresh } = useContext(RefreshContext)
+  const notifier = useNotifier({ currData: posts });
+
   useEffect(() => {
     getPosts(token)
       .then((r) => {
         setPosts(r.data);
         setIsLoading(false);
+
+        notifier.setState({
+          show: false,
+          count: 0,
+        });
       })
       .catch((err) => {
         alert(err);
         console.log(err.message);
         setIsLoading(false);
       })
-  }, []);
+  }, [refresh, token]);
 
   const handlePublish = (newPost) => {
     console.log("Nova publicação:", newPost);
@@ -36,9 +52,7 @@ export default function TimeLinePage() {
   return (
     <TemplatePage>
 
-      <TitleTemplate/>
-      
-      
+      <TitleTemplate />
       {/* Outro conteúdo da timeline aqui */}
       <Container>
         {isLoading ?
@@ -49,10 +63,11 @@ export default function TimeLinePage() {
           :
           <PostsContainer>
             <PublishBox onPublish={handlePublish} />
-              {posts.length === 0 && <MessageContainer data-test="message" className="Oswald">There are no posts yet</MessageContainer>}
-              {posts.map(p =>
-                <PostCard post={p} key={p.id}/>
-              )}
+            {notifier.state.show && <PostsNotifier notifier={notifier} setRefresh={setRefresh} />}
+            {posts.length === 0 && <MessageContainer data-test="message" className="Oswald">There are no posts yet</MessageContainer>}
+            {posts.map(p =>
+              <PostCard post={p} key={p.id} />
+            )}
           </PostsContainer>
         }
         <SideBar />
@@ -89,7 +104,7 @@ const LoadingContainer = styled.div`
     align-items: center;
     justify-content: center;
     gap: 10px;
-    
+
     h1{
       font-size: 35px;
     }
