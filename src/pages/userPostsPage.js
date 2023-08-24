@@ -29,7 +29,6 @@ export default function UserPostsPage() {
   const handleUserPosts = (limit) => {
     apiHashtags.getUserPosts(id, user.token, limit)
       .then((r) => {
-        setIsLoading(false);
         setListaPosts(r.data);
         if (r.data[0].username) {
           setUserData({ username: r.data[0].username, photo: r.data[0].photo })
@@ -39,6 +38,9 @@ export default function UserPostsPage() {
       })
       .catch((err) => {
         console.log(err.message);
+      })
+      .finally(()=>{
+        setIsLoading(false);
       })
   }
 
