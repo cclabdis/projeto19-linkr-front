@@ -14,8 +14,11 @@ export const createPost = async (postData, token) => {
   }
 };
 
-export default function getPosts(token) {
-  const promise = axios.get(`${API_URL}/timeline`, ConfigToken(token));
+export default function getPosts(token, limit) {
+  const config = {
+    headers: { Authorization: `Bearer ${token}`, Limit: `${limit}` }
+  };
+  const promise = axios.get(`${API_URL}/timeline`, config);
   return promise;
 }
 

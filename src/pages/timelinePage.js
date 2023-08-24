@@ -17,22 +17,35 @@ import PostsNotifier from "../components/timeline/postsNotifier";
 
 import getPosts from "../services/apiPosts";
 import useNotifier from "../hooks/useNotifier";
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimeLinePage() {
   const { user } = useContext(UserContext);
   const token = user.token;
   const [posts, setPosts] = useState([]);
+  const [limit, setLimit] = useState(10);
+  const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const { refresh, setRefresh } = useContext(RefreshContext)
   const notifier = useNotifier({ currData: posts });
 
   useEffect(() => {
-    getPosts(token)
+    handlePosts(limit);
+  }, [refresh, token]);
+
+  const handlePublish = (newPost) => {
+    console.log("Nova publicação:", newPost);
+  };
+
+  const handlePosts = (limit) => {
+    getPosts(token, limit)
       .then((r) => {
         console.log(r.data);
         setPosts(r.data);
         setIsLoading(false);
+        setLimit(limit+10);
+        if((r.data.length - limit) < 0) setHasMore(false); 
 
         notifier.setState({
           show: false,
@@ -44,11 +57,7 @@ export default function TimeLinePage() {
         console.log(err.message);
         setIsLoading(false);
       })
-  }, [refresh, token]);
-
-  const handlePublish = (newPost) => {
-    console.log("Nova publicação:", newPost);
-  };
+  } 
 
   return (
     <TemplatePage>
@@ -66,9 +75,23 @@ export default function TimeLinePage() {
             <PublishBox onPublish={handlePublish} />
               {notifier.state.show && <PostsNotifier notifier={notifier} setRefresh={setRefresh} />}
               {
-                (posts[0].message)? 
+                (posts[0].message)
+                ? 
                   <MessageContainer data-test="message" className="Oswald">{posts[0].message}</MessageContainer>
-                : (posts.length!==0) && posts.map(p =><PostCard post={p} key={p.id}/>)
+                : 
+                  <ScrollContainer>
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={() => handlePosts(limit)}
+                        hasMore={hasMore}
+                        loader={
+                          <Loader key={0}>
+                            <h1 className="Oswald">Loading more posts...</h1>
+                          </Loader>}
+                    >
+                      {(posts.length!==0) && posts.map(p =><PostCard post={p} key={p.id}/>)}
+                    </InfiniteScroll>        
+                  </ScrollContainer>
               }
 
           </PostsContainer>
@@ -98,6 +121,29 @@ const PostsContainer = styled.div`
     align-items: center;
     gap: 20px;
 `
+
+const ScrollContainer = styled.div`
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+`
+
+const Loader = styled.div`
+  height: 50px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  h1 {
+    color: #151515;
+  }
+`
+
 const LoadingContainer = styled.div`
     height: 345px;
     width: 611px;
