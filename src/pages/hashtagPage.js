@@ -7,6 +7,7 @@ import { UserContext } from "../contexts/userContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import PostCard from "../components/timeline/PostCard";
 import SideBar from "../components/common/sideBar";
+import InfiniteScroll from "react-infinite-scroller";
 
 
 export default function HashatgPage(){
@@ -14,22 +15,29 @@ export default function HashatgPage(){
     const {user} = useContext(UserContext);
     const [listaPosts, setListaPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [limit, setLimit] = useState(10);
+    const [hasMore, setHasMore] = useState(true);
 
     useEffect(()=>{
         setListaPosts([]);
         setIsLoading(true);
-        apiHashtags.getPostsByHashtag(hashtag,user.token).
-        then((resp)=>{
-            console.log(resp.data);
+        handleHashtagPosts(limit);
+    },[hashtag])
+
+    const handleHashtagPosts = (limit) => {
+        apiHashtags.getPostsByHashtag(hashtag,user.token, limit)
+        .then((resp) => {
             setListaPosts(resp.data);
+            setLimit(limit+10);
+            if((resp.data.length - limit) < 0) setHasMore(false); 
         })
-        .catch((err)=>{
+        .catch((err) => {
             console.log(err.message);
         })
         .finally(()=>{
             setIsLoading(false); 
         })
-    },[hashtag])
+    } 
     
 
     return (
@@ -39,12 +47,29 @@ export default function HashatgPage(){
             </TitleContainer>
             <Container>
                 <PostsContainer>
-                    {(isLoading)?(
-                        <LoadingContainer>
+                    {isLoading
+                    ?
+                        (<LoadingContainer>
                             <ClipLoader color="#fff" size={150} />
                             <h1 className="Oswald">Loading posts...</h1>
                         </LoadingContainer>)
-                    :(listaPosts.map((post,i)=>(<PostCard post={post} key={`post_${i}`} />)))}
+                    :
+                        <ScrollContainer>
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={() => handleHashtagPosts(limit)}
+                                hasMore={hasMore}
+                                loader={
+                                    <Loader key={0}>
+                                      <h1 className="Oswald">Loading more posts...</h1>
+                                    </Loader>}
+                            >
+                                {listaPosts.map((post,i)=>(<PostCard post={post} key={`post_${i}`} />))}
+                            </InfiniteScroll>        
+                        </ScrollContainer>
+                    }
+                    
+                    
                 </PostsContainer>
                 <SideBar/>
             </Container>
@@ -99,4 +124,25 @@ const PostsContainer = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 20px;
+`
+
+const ScrollContainer = styled.div`
+    > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }   
+`
+const Loader = styled.div`
+  height: 50px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 15px;
+  h1 {
+    color: #151515;
+  }
 `

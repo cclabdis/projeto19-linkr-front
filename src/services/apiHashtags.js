@@ -8,13 +8,19 @@ function getTrending(){
     return promise;
 }
 
-function getPostsByHashtag(hashtag,token){
-    const promise = axios.get(`${API_URL}/posts/hashtags/${hashtag}`,ConfigToken(token));
+function getPostsByHashtag(hashtag,token, limit){
+    const config = {
+        headers: { Authorization: `Bearer ${token}`, Limit: `${limit}` }
+      };
+    const promise = axios.get(`${API_URL}/posts/hashtags/${hashtag}`, config);
     return promise;
 }
 
-function getUserPosts(username, token) {
-    const promise = axios.get(`${API_URL}/timeline/user/${username}`, ConfigToken(token));
+function getUserPosts(username, token, limit) {
+    const config = {
+        headers: { Authorization: `Bearer ${token}`, Limit: `${limit}` }
+      };
+    const promise = axios.get(`${API_URL}/timeline/user/${username}`, config);
     return promise;
 }
 

@@ -75,7 +75,7 @@ export default function Header() {
   return (
     <>
       <HeaderSC>
-        <h1 onClick={() => navigate("/timeline")}>linker</h1>
+        <h1 onClick={() => navigate("/timeline")}>linkr</h1>
         {!isMobile && (
           <DesktopInputSC>
             <DebounceInput
