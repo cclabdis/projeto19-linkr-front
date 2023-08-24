@@ -51,7 +51,7 @@ export default function UserPageTitle({userId}){
                         </UserContainer>
                         {!(isYou) &&
                             <ButtonContainer>
-                                <FollowButton isFollowing={userInfos.isFollowing} userId={userInfos.id} data-test="follow-btn"/>
+                                <FollowButton isFollowing={userInfos.isFollowing} userId={userInfos.id} />
                             </ButtonContainer>
                         }
                     </PositionContainerSC>)
