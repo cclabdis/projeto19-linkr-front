@@ -17,8 +17,6 @@ import PostsNotifier from "../components/timeline/postsNotifier";
 
 import getPosts from "../services/apiPosts";
 import useNotifier from "../hooks/useNotifier";
-import ClipLoader from "react-spinners/ClipLoader";
-import TitleTemplate from "../components/common/titleTemplate";
 import InfiniteScroll from 'react-infinite-scroller';
 
 export default function TimeLinePage() {
