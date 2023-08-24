@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { styled } from "styled-components";
-import { AiOutlineHeart, AiFillHeart, AiFillDelete } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiFillDelete, AiOutlineComment } from 'react-icons/ai';
 import { PiPencilBold } from 'react-icons/pi';
 import { Tooltip } from "react-tooltip";
 
@@ -19,6 +19,9 @@ import { updatePost } from "../../services/apiPosts";
 import apiLikes from "../../services/apiLikes";
 
 import content from "../../helpers/toolTipContent";
+
+
+import { BiRepost } from 'react-icons/bi';
 
 export default function PostCard({ post }) {
     const navigate = useNavigate();
@@ -40,7 +43,7 @@ export default function PostCard({ post }) {
         count: Number(post['like_count']),
         users: post['likes_users'] || [],
     });
-    const {refresh, setRefresh} = useContext(RefreshContext);
+    const { refresh, setRefresh } = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
@@ -57,22 +60,22 @@ export default function PostCard({ post }) {
     const editRef = useRef();
 
     useEffect(() => {
-        if(isEditing) { editRef.current.focus();  };
+        if (isEditing) { editRef.current.focus(); };
     }, [isEditing]);
 
     const handlePress = e => {
-        if(e.key === "Escape") {
-             setIsEditing(false);
-             setDesc(post.description);
-        } else if (e.key === "Enter" ) {
-             setSubmitting(true);
-             handleSubmit()
+        if (e.key === "Escape") {
+            setIsEditing(false);
+            setDesc(post.description);
+        } else if (e.key === "Enter") {
+            setSubmitting(true);
+            handleSubmit()
         }
-     };
+    };
 
     const handleLike = async () => {
         try {
-            await apiLikes(likesInfo.liked, (likesInfo.liked ? `/deslike/` : `/like/`) +  `${post.id}`, user.token);
+            await apiLikes(likesInfo.liked, (likesInfo.liked ? `/deslike/` : `/like/`) + `${post.id}`, user.token);
             setLikesInfo(prev => ({
                 liked: !prev.liked,
                 count: prev.count + (prev.liked ? -1 : 1),
@@ -85,20 +88,20 @@ export default function PostCard({ post }) {
         }
     }
 
-     function handleSubmit(){
-        const data = {description: desc, hashtagsList: desc.split(" ").filter(c => c[0] === '#')};
+    function handleSubmit() {
+        const data = { description: desc, hashtagsList: desc.split(" ").filter(c => c[0] === '#') };
         updatePost(token, post.id, data)
-        .then(() => {
-            setIsEditing(false);
-            setReplaced(replaced(desc));
-            setRefresh(!refresh);
+            .then(() => {
+                setIsEditing(false);
+                setReplaced(replaced(desc));
+                setRefresh(!refresh);
             })
-        .catch(err => {
-            console.log(err.message);
-            alert(`The changes couldn't be saved! Error: ${err.message}`);
-        })
+            .catch(err => {
+                console.log(err.message);
+                alert(`The changes couldn't be saved! Error: ${err.message}`);
+            })
         setSubmitting(false);
-     };
+    };
 
     return (
 
@@ -123,16 +126,28 @@ export default function PostCard({ post }) {
                 <Tooltip
                     id={`tooltip-${post.id}`}
                     render={() => <p
-                            data-test="tooltip"
-                        >
-                            {likesInfo.users.length > 0
-                                ? content(likesInfo.users, user.id)
-                                : "No one liked this post yet"}
-                        </p>}
+                        data-test="tooltip"
+                    >
+                        {likesInfo.users.length > 0
+                            ? content(likesInfo.users, user.id)
+                            : "No one liked this post yet"}
+                    </p>}
                 />
-                    <p
-                        data-tooltip-id={`tooltip-${post.id}`} data-test="counter"
-                    >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
+                <p
+                    data-tooltip-id={`tooltip-${post.id}`} data-test="counter"
+                >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
+                <AiOutlineComment
+                    data-test="comment-btn"
+                    size={30}
+                    cursor="pointer"
+                />
+
+                <BiRepost
+                    data-test="repost-btn"
+                    size={30}
+                    cursor="pointer"
+                />
+                
             </ImgLikeContainer>
 
             <PostInfo>
