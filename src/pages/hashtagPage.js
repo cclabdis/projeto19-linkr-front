@@ -27,6 +27,7 @@ export default function HashatgPage(){
     const handleHashtagPosts = (limit) => {
         apiHashtags.getPostsByHashtag(hashtag,user.token, limit)
         .then((resp) => {
+            console.log(resp.data);
             setListaPosts(resp.data);
             setLimit(limit+10);
             if((resp.data.length - limit) < 0) setHasMore(false); 
