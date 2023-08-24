@@ -19,6 +19,7 @@ export default function TimeLinePage() {
   useEffect(() => {
     getPosts(token)
       .then((r) => {
+        console.log(r.data);
         setPosts(r.data);
         setIsLoading(false);
       })
@@ -49,10 +50,11 @@ export default function TimeLinePage() {
           :
           <PostsContainer>
             <PublishBox onPublish={handlePublish} />
-              {posts.length === 0 && <MessageContainer data-test="message" className="Oswald">There are no posts yet</MessageContainer>}
-              {posts.map(p =>
-                <PostCard post={p} key={p.id}/>
-              )}
+              {
+                (posts[0].message)? 
+                  <MessageContainer data-test="message" className="Oswald">{posts[0].message}</MessageContainer>
+                : (posts.length!==0) && posts.map(p =><PostCard post={p} key={p.id}/>)
+              }
           </PostsContainer>
         }
         <SideBar />
