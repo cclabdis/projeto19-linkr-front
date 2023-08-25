@@ -12,6 +12,7 @@ import { UserContext } from "../../contexts/userContext";
 import { RefreshContext } from "../../contexts/refreshContext";
 
 import { handleDelete } from "./deleteCard";
+import PostComments from "./postComments";
 
 import { updatePost } from "../../services/apiPosts";
 import apiLikes from "../../services/apiLikes";
@@ -49,13 +50,15 @@ export default function PostCard({ post }) {
         reposted: post['has_posted'],
         count: Number(post['reposts_count']),
     });
+    const [commentsCount, setCommentsCount] = useState(post.comments_count);
+
     const { refresh, setRefresh } = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRepostModalOpen, setIsRepostModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
     };
-
+    const [showComments, setShowComments] = useState(false);
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
@@ -126,57 +129,64 @@ export default function PostCard({ post }) {
     };
 
     return (
+        <>
+            <Card data-test="post">
+                <ImgLikeContainer>
+                    <img src={post.photo} alt="user" />
+                    <div className="likes">
+                        {likesInfo.liked
+                            ? <AiFillHeart
+                                data-test="like-btn"
+                                size={30}
+                                color="red"
+                                onClick={handleLike}
+                                cursor="pointer"
+                            />
+                            : <AiOutlineHeart
+                                data-test="like-btn"
+                                size={30}
+                                onClick={handleLike}
+                                cursor="pointer"
+                            />
+                        }
+                        <Tooltip
+                            id={`tooltip-${post.id}`}
+                            render={() => <p
+                                data-test="tooltip"
+                            >
+                                {likesInfo.users.length > 0
+                                    ? content(likesInfo.users, user.id)
+                                    : "No one liked this post yet"}
+                            </p>}
+                        />
+                        <p
+                            data-tooltip-id={`tooltip-${post.id}`} data-test="counter"
+                        >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
+                    </div>
+                    <div className="comments">
+                        <AiOutlineComment
+                            onClick={() => setShowComments(prev => !prev)}
+                            data-test="comment-btn"
+                            size={30}
+                            cursor="pointer"
+                        />
+                        <p data-test="comment-counter" >
+                            {commentsCount.toString() + " " +
+                                (Number(commentsCount) === 1 ? "comment" : "comments")}
+                        </p>
+                    </div>
 
-        <Card data-test="post">
-            <ImgLikeContainer>
-                <img src={post.photo} alt="user" />
-                {likesInfo.liked
-                    ? <AiFillHeart
-                        data-test="like-btn"
-                        size={30}
-                        color="red"
-                        onClick={handleLike}
-                        cursor="pointer"
+                    <div>
+                        <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
+                        <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? " repost" : " reposted")}</p>
+                    </div>
+                    <RepostModal
+                        isOpen={isRepostModalOpen}
+                        onClose={() => setIsRepostModalOpen(false)}
+                        onRepost={handleRepostPost}
                     />
-                    : <AiOutlineHeart
-                        data-test="like-btn"
-                        size={30}
-                        onClick={handleLike}
-                        cursor="pointer"
-                    />
-                }
-                <Tooltip
-                    id={`tooltip-${post.id}`}
-                    render={() => <p
-                        data-test="tooltip"
-                    >
-                        {likesInfo.users.length > 0
-                            ? content(likesInfo.users, user.id)
-                            : "No one liked this post yet"}
-                    </p>}
-                />
-                <p
-                    data-tooltip-id={`tooltip-${post.id}`} data-test="counter"
-                >{likesInfo.count + " " + (likesInfo.count === 1 ? "like" : "likes")}</p>
 
-                <AiOutlineComment
-                    data-test="comment-btn"
-                    size={30}
-                    cursor="pointer"
-                />
-                <div>
-                    <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
-                    <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? "repost" : "reposted")}</p>
-                </div>
-                <RepostModal
-                    isOpen={isRepostModalOpen}
-                    onClose={() => setIsRepostModalOpen(false)}
-                    onRepost={handleRepostPost}
-                />
-
-
-
-            </ImgLikeContainer>
+                </ImgLikeContainer>
 
             <PostInfo>
                 <NameIconsContainer>
@@ -189,6 +199,7 @@ export default function PostCard({ post }) {
                                 onClick={() => setIsEditing(!isEditing)}
                                 data-test="edit-btn"
                             />
+                            {/* <AiFillDelete size={20} onClick={() => handleDelete(post.id, user.token)} /> */}
                             <AiFillDelete data-test="delete-btn" size={20} onClick={openDeleteModal} />
                             <DeleteModal
                                 isOpen={isModalOpen}
@@ -198,44 +209,49 @@ export default function PostCard({ post }) {
                         </div>
                     }
 
-                </NameIconsContainer>
+                    </NameIconsContainer>
 
-                {isEditing
-                    ?
-                    <EditDescription >
-                        <input
-                            data-test="edit-input"
-                            disabled={submitting}
-                            onKeyDown={(e) => handlePress(e)}
-                            ref={editRef}
-                            type="text"
-                            value={desc}
-                            onChange={(e) => setDesc(e.target.value)}
-                        />
-                    </EditDescription>
-                    :
-                    <h2 data-test="description">{replacedDesc}</h2>
-                }
+                    {isEditing
+                        ?
+                        <EditDescription >
+                            <input
+                                data-test="edit-input"
+                                disabled={submitting}
+                                onKeyDown={(e) => handlePress(e)}
+                                ref={editRef}
+                                type="text"
+                                value={desc}
+                                onChange={(e) => setDesc(e.target.value)}
+                            />
+                        </EditDescription>
+                        :
+                        <h2 data-test="description">{replacedDesc}</h2>
+                    }
 
-                {Object.keys(post.linkMetadata).length !== 0
-                    ?
-                    <LinkContainer onClick={() => openInNewTab(post.link)}>
-                        <div>
-                            <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
-                            <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
-                            <a id="link-post" href={post.link} data-test="link">{post.link}</a>
-                        </div>
-                        <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
-                    </LinkContainer>
-                    :
-                    <LinkEmpty data-test="link" onClick={() => openInNewTab(post.link)}>
-                        <h3>No preview available</h3>
-                        <h5>{post.link}</h5>
-                    </LinkEmpty>
-                }
+                    {Object.keys(post.linkMetadata).length !== 0
+                        ?
+                        <LinkContainer onClick={() => openInNewTab(post.link)}>
+                            <div>
+                                <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
+                                <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
+                                <a id="link-post" href={post.link} data-test="link">{post.link}</a>
+                            </div>
+                            <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
+                        </LinkContainer>
+                        :
+                        <LinkEmpty data-test="link" onClick={() => openInNewTab(post.link)}>
+                            <h3>No preview available</h3>
+                            <h5>{post.link}</h5>
+                        </LinkEmpty>
+                    }
 
-            </PostInfo>
-        </Card>
+                </PostInfo>
+            </Card>
+            {showComments && <PostComments
+                                post={post}
+                                setCommentsCount={setCommentsCount}
+                                commentsCount={commentsCount}/>}
+        </>
     )
 }
 
@@ -249,7 +265,9 @@ const Card = styled.div`
     gap: 20px;
     box-sizing: border-box;
 
-    * { 
+    /* z-index: 5; */
+
+    * {
         box-sizing: border-box;
     }
 
@@ -272,6 +290,21 @@ const ImgLikeContainer = styled.div`
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+    }
+
+    .likes, .comments {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+
+        width: 100%;
+
+        p {
+            width: fit-content;
+            text-align: center;
+        }
     }
 `
 

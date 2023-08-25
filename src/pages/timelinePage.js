@@ -41,11 +41,11 @@ export default function TimeLinePage() {
   const handlePosts = (limit) => {
     getPosts(token, limit)
       .then((r) => {
-        console.log(r.data);
+        // console.log(r.data);
         setPosts(r.data);
         setIsLoading(false);
         setLimit(limit+10);
-        if((r.data.length - limit) < 0) setHasMore(false); 
+        if((r.data.length - limit) < 0) setHasMore(false);
 
         notifier.setState({
           show: false,
@@ -57,7 +57,7 @@ export default function TimeLinePage() {
         console.log(err.message);
         setIsLoading(false);
       })
-  } 
+  };
 
   return (
     <TemplatePage>
@@ -76,9 +76,9 @@ export default function TimeLinePage() {
               {notifier.state.show && <PostsNotifier notifier={notifier} setRefresh={setRefresh} />}
               {
                 (posts[0].message)
-                ? 
+                ?
                   <MessageContainer data-test="message" className="Oswald">{posts[0].message}</MessageContainer>
-                : 
+                :
                   <ScrollContainer>
                     <InfiniteScroll
                         pageStart={0}
@@ -90,7 +90,7 @@ export default function TimeLinePage() {
                           </Loader>}
                     >
                       {(posts.length!==0) && posts.map(p =><PostCard post={p} key={p.id}/>)}
-                    </InfiniteScroll>        
+                    </InfiniteScroll>
                   </ScrollContainer>
               }
 

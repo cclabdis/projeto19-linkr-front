@@ -18,8 +18,6 @@ const ModalContent = styled.div`
     margin-bottom: 10px;
   }
 
-  
-
   button {
     padding: 10px 20px;
     border: none;
