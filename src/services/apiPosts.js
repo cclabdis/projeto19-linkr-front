@@ -24,6 +24,7 @@ export default function getPosts(token, limit) {
 
 export const deletePost = async (postId, token) => {
   try {
+    console.log(token)
     await axios.delete(`${API_URL}/timeline/${postId}`, ConfigToken(token));
     return;
   } catch (error) {
