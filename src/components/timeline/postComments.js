@@ -29,7 +29,7 @@ const PostComments = ({ post: { id }, commentsCount, setCommentsCount }) => {
 
         apiComments("/comment", user.token, id, newComment)
             .then(() => { window.location.reload(); })
-            .catch(err => { console.log(err.message); });
+            .catch(err => { });
 
         setSubmitting(false);
     };

@@ -70,8 +70,8 @@ export default function RepostModal({ isOpen, onClose, onRepost }) {
                 <h2>Do you want to re-post this link?</h2>
                 <div>
                     {/* Add your repost content here */}
-                    <button data-test="cancel-repost" onClick={onClose}>No, Cancel</button>
-                    <button data-test="confirm-repost" onClick={onRepost}>Yes, share!</button>
+                    <button data-test="cancel" onClick={onClose}>No, Cancel</button>
+                    <button data-test="confirm" onClick={onRepost}>Yes, share!</button>
                 </div>
             </ModalContent>
         </Modal>
