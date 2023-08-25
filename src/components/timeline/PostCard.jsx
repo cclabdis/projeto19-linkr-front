@@ -161,7 +161,7 @@ export default function PostCard({ post }) {
                     cursor="pointer"
                 />
 
-                <BiRepost size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
+                <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
 
                 <RepostModal
                     isOpen={isRepostModalOpen}
