@@ -45,13 +45,17 @@ export default function PostCard({ post }) {
         count: Number(post['like_count']),
         users: post['likes_users'] || [],
     });
+    const [repostedInfo, setRepostedInfo] = useState({
+        reposted: post['has_posted'],
+        count: Number(post['reposts_count']),
+    });
     const { refresh, setRefresh } = useContext(RefreshContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRepostModalOpen, setIsRepostModalOpen] = useState(false);
     const openDeleteModal = () => {
         setIsModalOpen(true);
     };
-   
+
 
     const openInNewTab = (url) => {
         window.open(url, "_blank", "noreferrer");
@@ -160,13 +164,14 @@ export default function PostCard({ post }) {
                     size={30}
                     cursor="pointer"
                 />
-
-                <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
-
+                <div>
+                    <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
+                    <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? "repost" : "reposted")}</p>
+                </div>
                 <RepostModal
                     isOpen={isRepostModalOpen}
                     onClose={() => setIsRepostModalOpen(false)}
-                    onRepost={handleRepostPost} 
+                    onRepost={handleRepostPost}
                 />
 
 
