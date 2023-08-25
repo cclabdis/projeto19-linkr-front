@@ -96,13 +96,13 @@ const Container = styled.div`
 
     width: 100%;
     height: fit-content;
-    margin-top: -50px;
-    padding: 50px 30px 20px;
+    margin-top: -20px;
+    padding: 20px 30px 20px;
     border-radius: 15px;
 
     background: #1E1E1E;
 
-    z-index: 5;
+    /* z-index: 1; */
 
     hr {
         color: #565656;

@@ -178,7 +178,7 @@ export default function PostCard({ post }) {
 
                     <div>
                         <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
-                        <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? "repost" : "reposted")}</p>
+                        <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? " repost" : " reposted")}</p>
                     </div>
                     <RepostModal
                         isOpen={isRepostModalOpen}
@@ -208,36 +208,6 @@ export default function PostCard({ post }) {
                             />
                         </div>
                     }
-                    <Modal
-                        isOpen={isModalOpen}
-                        onRequestClose={() => setIsModalOpen(false)}
-                        contentLabel="Confirm Delete"
-                        style={{
-                            overlay: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            },
-                            content: {
-                                top: '50%',
-                                left: '50%',
-                                right: 'auto',
-                                bottom: 'auto',
-                                marginRight: '-50%',
-                                transform: 'translate(-50%, -50%)',
-                                border: 'none',
-                                padding: '0',
-                            },
-                        }}
-                    >
-                        <ModalContent>
-                            <h2>Are you sure you want to delete this post?</h2>
-
-                            <div>
-                                <button data-test="cancel" onClick={() => setIsModalOpen(false)}>No, go back</button>
-                                <button data-test="confirm" onClick={() => handleDelete(post.id, user.token, setIsModalOpen)}>Yes, delete it</button>
-
-                            </div>
-                        </ModalContent>
-                    </Modal>
 
                     </NameIconsContainer>
 
@@ -295,7 +265,7 @@ const Card = styled.div`
     gap: 20px;
     box-sizing: border-box;
 
-    z-index: 10;
+    /* z-index: 5; */
 
     * {
         box-sizing: border-box;
