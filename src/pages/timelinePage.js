@@ -41,7 +41,7 @@ export default function TimeLinePage() {
   const handlePosts = (limit) => {
     getPosts(token, limit)
       .then((r) => {
-        // console.log(r.data);
+        console.log(r.data);
         setPosts(r.data);
         setIsLoading(false);
         setLimit(limit+10);

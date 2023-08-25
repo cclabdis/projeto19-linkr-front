@@ -130,6 +130,33 @@ export default function PostCard({ post }) {
 
     return (
         <>
+            {post['reposts_count'] > 0 ? <div
+                style={{
+                    display: "flex",
+                    gap: "10px",
+
+                    boxSizing: "border-box",
+                    borderTopLeftRadius: '16px',
+                    borderTopRightRadius: '16px',
+                    background: '#1E1E1E',
+
+                    padding: "15px",
+                    marginBottom: "-30px",
+                    width: '100%',
+                    height: '50px',
+                }}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M5 13V8H7L3.5 4L0 8H2V14C2 14.5304 2.21071 15.0391 2.58579 15.4142C2.96086 15.7893 3.46957 16 4 16H13.482L10.844 13H5ZM9.156 7L6.518 4H16C17.104 4 18 4.897 18 6V12H20L16.5 16L13 12H15V7H9.156Z" fill="white" />
+                </svg>
+                <p
+                    style={{ color: "FFF", fontSize: "14px", fontFamily: "Lato" }}
+                >Re-posted by {
+                    <span style={{ fontWeight: "700" }}>
+                        {post['reposts_users'].map(user => user.username || "Fulano").join(", ")}
+                    </span>
+                }</p>
+            </div> : <></>}
             <Card data-test="post">
                 <ImgLikeContainer>
                     <img src={post.photo} alt="user" />
@@ -178,7 +205,7 @@ export default function PostCard({ post }) {
 
                     <div>
                         <BiRepost data-test="repost-btn" size={30} cursor="pointer" onClick={() => setIsRepostModalOpen(true)} />
-                        <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? " repost" : " reposted")}</p>
+                        <p data-test="repost-counter">{repostedInfo.count + "" + (repostedInfo.count === 1 ? " re-post" : " re-posts")}</p>
                     </div>
                     <RepostModal
                         isOpen={isRepostModalOpen}
@@ -234,7 +261,15 @@ export default function PostCard({ post }) {
                             <div>
                                 <h3>{post.linkMetadata.title === '' ? "No title available" : post.linkMetadata.title}</h3>
                                 <h4>{post.linkMetadata.description === '' ? "No description available" : post.linkMetadata.description}</h4>
-                                <a id="link-post" href={post.link} data-test="link">{post.link}</a>
+                                <a
+                                    data-test="link"
+                                    id="link-post"
+                                    href={post.link}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {post.link}
+                                </a>
                             </div>
                             <img src={post.linkMetadata.image} alt={post.linkMetadata.image === '' ? "" : "metadata"} />
                         </LinkContainer>
@@ -264,8 +299,6 @@ const Card = styled.div`
     display: flex;
     gap: 20px;
     box-sizing: border-box;
-
-    /* z-index: 5; */
 
     * {
         box-sizing: border-box;
@@ -363,7 +396,8 @@ const PostInfo = styled.div`
 
 const LinkContainer = styled.div`
     min-height: 155px;
-    min-width: 500px;
+    width: 90%;
+    min-width: 450px;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     display: flex;
@@ -416,6 +450,14 @@ const LinkContainer = styled.div`
         color: #CECECE;
     }
 
+    a {
+        text-decoration: none;
+        color: #CECECE;
+        font-family: Lato;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
     &:hover{
         cursor: pointer;
     }
@@ -423,7 +465,7 @@ const LinkContainer = styled.div`
 
 const LinkEmpty = styled.div`
     height: 80px;
-    min-width: 500px;
+    width: 90%;
     border: 1px solid #4D4D4D;
     border-radius: 11px;
     padding: 20px;
