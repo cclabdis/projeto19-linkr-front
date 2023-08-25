@@ -41,7 +41,7 @@ export default function TimeLinePage() {
   const handlePosts = (limit) => {
     getPosts(token, limit)
       .then((r) => {
-        console.log(r.data);
+        // console.log(r.data);
         setPosts(r.data);
         setIsLoading(false);
         setLimit(limit+10);
@@ -54,7 +54,7 @@ export default function TimeLinePage() {
       })
       .catch((err) => {
         alert(err);
-        console.log(err.message);
+        // console.log(err.message);
         setIsLoading(false);
       })
   };
@@ -89,7 +89,7 @@ export default function TimeLinePage() {
                             <h1 className="Oswald">Loading more posts...</h1>
                           </Loader>}
                     >
-                      {(posts.length!==0) && posts.map(p =><PostCard post={p} key={p.id}/>)}
+                      {(posts.length!==0) && posts.map((p, index) =><PostCard post={p} key={`${p.id}-${index}`}/>)}
                     </InfiniteScroll>
                   </ScrollContainer>
               }

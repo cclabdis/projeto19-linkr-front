@@ -282,7 +282,7 @@ export default function PostCard({ post }) {
 
                 </PostInfo>
             </Card>
-            {showComments && <PostComments
+            {(showComments || Number(post.comments_count) > 0) && <PostComments
                                 post={post}
                                 setCommentsCount={setCommentsCount}
                                 commentsCount={commentsCount}/>}
